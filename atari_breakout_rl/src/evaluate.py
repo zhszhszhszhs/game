@@ -29,7 +29,9 @@ def run_episodes(model=None, episodes=50, seed=10000, output=None):
                 if dones[0]:
                     assert abs(reward_sum - infos[0]['episode']['r']) < 1e-4
                     rows.append(dict(episode=episode + 1, seed=episode_seed,
-                                     reward=reward_sum, length=length))
+                                     reward=reward_sum, length=length,
+                                     truncated=bool(infos[0].get('TimeLimit.truncated', False)),
+                                     remaining_lives=infos[0].get('lives')))
                     print(f"Episode {episode+1}/{episodes}: reward={reward_sum:g}, length={length}", flush=True)
                     break
     finally:

@@ -109,7 +109,10 @@ class GameViewer:
                     observation, rewards, dones, infos = env.step(action)
                     total += float(rewards[0])
                     length += 1
-                    values = dict(reward=total, length=length, action=meanings[int(action[0])],
+                    label = meanings[int(action[0])]
+                    if infos[0].get('ale_auto_fire'):
+                        label += ' + 自动发球'
+                    values = dict(reward=total, length=length, action=label,
                                   lives=infos[0].get('lives'), status='playing')
                     if dones[0]:
                         # The VecEnv already reset; keep the last game's final visible frame.

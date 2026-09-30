@@ -13,6 +13,7 @@ from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecTran
 gym.register_envs(ale_py)
 ENV_ID = "ALE/Breakout-v5"
 ENV_SPEC = dict(env_id=ENV_ID, ale_frameskip=1, wrapper_frame_skip=4,
+                auto_fire_on_life_loss=True,
                 frame_stack=4, screen_size=84, repeat_action_probability=0.0,
                 terminal_on_life_loss=False, clip_reward=False, noop_max=30,
                 max_num_frames_per_episode=108000, fire_on_reset=True)
@@ -25,15 +26,56 @@ def raw_env(render_mode=None):
                     render_mode=render_mode)
 
 
-def make_env(seed=42, monitor_path=None, render_mode=None):
+class FireOnLifeLoss(gym.Wrapper):
+    """Press the ALE FIRE action once after a lost life, without changing game episodes.
+
+    Breakout waits for FIRE after most life losses. A purely greedy DQN can prefer
+    NOOP forever in that screen, making evaluation last the full 30-minute ALE cap.
+    The extra action adds its native ALE reward, if any; there is no reward shaping.
+    """
+    def __init__(self, env):
+        super().__init__(env)
+        meanings = env.unwrapped.get_action_meanings()
+        self.fire_action = meanings.index('FIRE') if 'FIRE' in meanings else None
+        self._last_lives = None
+
+    def _lives(self):
+        return int(self.unwrapped.ale.lives())
+
+    def reset(self, **kwargs):
+        observation, info = self.env.reset(**kwargs)
+        self._last_lives = self._lives()
+        return observation, info
+
+    def step(self, action):
+        # Sit outside AtariWrapper so life changes are checked once per agent decision.
+        observation, reward, terminated, truncated, info = self.env.step(action)
+        lives = self._lives()
+        if (self.fire_action is not None and self._last_lives is not None
+                and lives < self._last_lives and not terminated and not truncated):
+            observation, fire_reward, fire_terminated, fire_truncated, fire_info = self.env.step(self.fire_action)
+            reward += fire_reward  # Environment reward only; no shaping.
+            terminated, truncated = fire_terminated, fire_truncated
+            info = {**info, **fire_info}
+            info['ale_life_lost'] = True
+            info['ale_auto_fire'] = True
+            info['lives'] = fire_info.get('lives', self._lives())
+        self._last_lives = self._lives()
+        return observation, reward, terminated, truncated, info
+
+
+def make_env(seed=42, monitor_path=None, render_mode=None, auto_fire_on_life_loss=True):
     def factory():
         env = raw_env(render_mode)
         env = AtariWrapper(env, frame_skip=4, screen_size=84, noop_max=30,
                            terminal_on_life_loss=False, clip_reward=False)
+        if auto_fire_on_life_loss:
+            env = FireOnLifeLoss(env)
         # Complete games, native reward. Do not turn each lost life into an episode.
         if monitor_path:
             Path(monitor_path).parent.mkdir(parents=True, exist_ok=True)
-        env = Monitor(env, filename=str(monitor_path) if monitor_path else None)
+        env = Monitor(env, filename=str(monitor_path) if monitor_path else None,
+                      info_keywords=('lives',))
         env.action_space.seed(seed)
         return env
     vec = DummyVecEnv([factory])

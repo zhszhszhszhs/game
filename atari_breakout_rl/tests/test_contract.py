@@ -38,6 +38,32 @@ class EnvironmentContract(unittest.TestCase):
         self.assertEqual(after - before, 4)
         np.testing.assert_array_equal(following[:, :3], second[:, 1:])
 
+    def test_lost_life_restarts_game_without_ending_episode(self):
+        observation = self.env.reset()
+        initial_lives = self.env.venv.venv.envs[0].unwrapped.ale.lives()
+        recovered = False
+        noop = self.env.env_method('get_action_meanings')[0].index('NOOP')
+        for _ in range(2000):
+            observation, rewards, dones, infos = self.env.step([noop])  # NOOP after reset FIRE
+            self.assertFalse(dones[0], 'One lost life must not end a complete game')
+            if infos[0].get('ale_life_lost'):
+                self.assertTrue(infos[0]['ale_auto_fire'])
+                self.assertEqual(infos[0]['lives'], initial_lives - 1)
+                recovered = True
+                break
+        self.assertTrue(recovered, 'ALE Breakout did not lose a life in 2000 NOOP steps')
+        self.assertEqual(observation.shape, (1, 4, 84, 84))
+        # A returned frame after FIRE means the environment can continue serving.
+        self.assertEqual(self.env.venv.venv.envs[0].unwrapped.ale.lives(), initial_lives - 1)
+        for _ in range(2000):
+            _, _, dones, infos = self.env.step([noop])
+            if dones[0]:
+                self.assertFalse(infos[0]['TimeLimit.truncated'])
+                self.assertEqual(infos[0]['lives'], 0)
+                break
+        else:
+            self.fail('Repeated NOOP must finish a real game, not stay waiting for FIRE')
+
     def test_model_round_trip(self):
         model = DQN('CnnPolicy', self.env, buffer_size=64, learning_starts=8,
                     batch_size=8, seed=123, device='cpu')
