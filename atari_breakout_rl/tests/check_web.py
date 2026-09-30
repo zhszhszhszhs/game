@@ -25,9 +25,13 @@ def main():
 
     connected = False
     try:
-        assert 'Breakout 游戏演示' in request('/').decode()
+        assert 'Agent 游戏演示' in request('/').decode()
+        assert '.screen' in request('/style.css').decode()
+        assert '/api/game/stream' in request('/app.js').decode()
         connected = True
-        model = next((m for m in state()['models'] if m.endswith('final_model.zip')), None)
+        model = state().get('recommended_model')
+        if model == 'random':
+            model = None
         for agent in ['random'] + ([model] if model else []):
             request('/api/game/start', dict(agent=agent, seed=20000))
             deadline = time.monotonic() + 30
@@ -38,6 +42,28 @@ def main():
                     break
                 time.sleep(.1)
             assert snapshot['length'] >= 5, snapshot
+            # Decode a continuous sequence, not just the first HTTP response frame.
+            with opener.open(base + '/api/game/stream', timeout=10) as stream:
+                assert 'multipart/x-mixed-replace' in stream.headers['Content-Type']
+                started = time.monotonic()
+                for _ in range(30):
+                    while stream.readline().strip() != b'--frame':
+                        if time.monotonic() - started > 10:
+                            raise AssertionError('Stream stalled')
+                    headers = {}
+                    while True:
+                        line = stream.readline().strip()
+                        if not line:
+                            break
+                        key, value = line.split(b':', 1)
+                        headers[key.lower()] = value.strip()
+                    picture = Image.open(io.BytesIO(stream.read(int(headers[b'content-length']))))
+                    picture.load()
+                    assert picture.size == (160, 210) and picture.format == 'JPEG'
+                print(f'Stream: 30 real frames in {time.monotonic()-started:.2f}s')
+            request('/api/game/speed', dict(speed=0.5))
+            assert state()['speed'] == 0.5
+            request('/api/game/speed', dict(speed=1))
             request('/api/game/pause', dict(paused=True))
             time.sleep(.15)
             before = state()['length']

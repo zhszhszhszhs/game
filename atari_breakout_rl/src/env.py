@@ -64,9 +64,30 @@ class FireOnLifeLoss(gym.Wrapper):
         return observation, reward, terminated, truncated, info
 
 
-def make_env(seed=42, monitor_path=None, render_mode=None, auto_fire_on_life_loss=True):
+class FrameObserver(gym.Wrapper):
+    """Observe actual ALE frames for live playback without changing transitions."""
+    def __init__(self, env, callback):
+        super().__init__(env)
+        self.callback = callback
+
+    def reset(self, **kwargs):
+        # VecEnv auto-reset frames belong to the next game, not the terminal frame.
+        self.callback(None, 0.0, None)
+        return self.env.reset(**kwargs)
+
+    def step(self, action):
+        transition = self.env.step(action)
+        observation, reward, _, _, _ = transition
+        self.callback(observation, float(reward), int(self.unwrapped.ale.lives()))
+        return transition
+
+
+def make_env(seed=42, monitor_path=None, render_mode=None, auto_fire_on_life_loss=True,
+             frame_callback=None):
     def factory():
         env = raw_env(render_mode)
+        if frame_callback is not None:
+            env = FrameObserver(env, frame_callback)
         env = AtariWrapper(env, frame_skip=4, screen_size=84, noop_max=30,
                            terminal_on_life_loss=False, clip_reward=False)
         if auto_fire_on_life_loss:

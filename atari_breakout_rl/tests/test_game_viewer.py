@@ -18,6 +18,11 @@ class GameViewerTest(unittest.TestCase):
             try:
                 with self.assertRaises(ValueError):
                     viewer.start('../outside.zip')
+                with self.assertRaises(ValueError):
+                    viewer.set_speed(.75)
+                viewer.set_speed(2)
+                self.assertEqual(viewer.snapshot()['speed'], 2)
+                viewer.set_speed(1)
                 viewer.start('random', 123)
                 deadline = time.monotonic() + 30
                 while viewer.snapshot()['length'] < 4 and time.monotonic() < deadline:
@@ -28,11 +33,16 @@ class GameViewerTest(unittest.TestCase):
                 image = Image.open(io.BytesIO(viewer.image()))
                 self.assertEqual(image.size, (160, 210))
                 self.assertEqual(image.format, 'PNG')
+                frame_id, jpeg = viewer.stream_frame(-1)
+                self.assertGreater(frame_id, viewer.snapshot()['length'])
+                self.assertEqual(Image.open(io.BytesIO(jpeg)).format, 'JPEG')
                 viewer.pause(True)
                 time.sleep(.15)  # let an in-flight inference finish
                 steps = viewer.snapshot()['length']
+                paused_frame = viewer.snapshot()['frame_id']
                 time.sleep(.2)
                 self.assertEqual(viewer.snapshot()['length'], steps)
+                self.assertEqual(viewer.snapshot()['frame_id'], paused_frame)
                 self.assertEqual(viewer.snapshot()['status'], 'paused')
                 viewer.pause(False)
                 time.sleep(.3)

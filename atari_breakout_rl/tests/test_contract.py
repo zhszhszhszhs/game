@@ -78,6 +78,43 @@ class EnvironmentContract(unittest.TestCase):
             np.testing.assert_array_equal(expected, loaded.predict(obs, deterministic=True)[0])
             self.assertEqual(model.num_timesteps, loaded.num_timesteps)
 
+    def test_display_frames_preserve_game_transitions(self):
+        frames = []
+        collecting = False
+
+        def capture(frame, reward, lives):
+            nonlocal collecting
+            if frame is None:
+                collecting = False
+            elif collecting:
+                frames.append((frame.copy(), reward, lives))
+
+        observed = make_env(123, render_mode='rgb_array', frame_callback=capture)
+        try:
+            np.testing.assert_array_equal(self.env.reset(), observed.reset())
+            for _ in range(2000):
+                frames.clear()
+                collecting = True
+                expected = self.env.step([0])
+                actual = observed.step([0])
+                np.testing.assert_array_equal(expected[0], actual[0])
+                np.testing.assert_array_equal(expected[1], actual[1])
+                np.testing.assert_array_equal(expected[2], actual[2])
+                self.assertGreater(len(frames), 0)
+                self.assertLessEqual(len(frames), 8)
+                self.assertEqual(frames[-1][0].shape, (210, 160, 3))
+                self.assertAlmostEqual(sum(f[1] for f in frames), float(actual[1][0]))
+                if actual[2][0]:
+                    # Last displayed frame must belong to the finished game,
+                    # not to the VecEnv's automatic reset or its FIRE actions.
+                    self.assertEqual(frames[-1][2], 0)
+                    self.assertFalse(collecting)
+                    break
+            else:
+                self.fail('Expected a complete game')
+        finally:
+            observed.close()
+
 
 if __name__ == '__main__':
     unittest.main()

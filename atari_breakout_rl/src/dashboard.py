@@ -30,11 +30,34 @@ def make_handler(viewer):
             path = urlparse(self.path).path
             if path == '/':
                 self.send((WEB / 'index.html').read_bytes(), 'text/html; charset=utf-8')
+            elif path in ('/style.css', '/app.js'):
+                kind = 'text/css' if path.endswith('.css') else 'text/javascript'
+                self.send((WEB / path[1:]).read_bytes(), kind + '; charset=utf-8')
             elif path == '/api/game/state':
                 self.send(viewer.snapshot())
             elif path == '/api/game/frame':
                 frame = viewer.image()
                 self.send(frame or b'', 'image/png', status=200 if frame else 204)
+            elif path == '/api/game/stream':
+                self.send_response(200)
+                self.send_header('Content-Type', 'multipart/x-mixed-replace; boundary=frame')
+                self.send_header('Cache-Control', 'no-store')
+                self.end_headers()
+                self.connection.settimeout(5)
+                last_frame = -1
+                try:
+                    while True:
+                        last_frame, frame = viewer.stream_frame(last_frame)
+                        if frame is not None:
+                            self.wfile.write(b'--frame\r\nContent-Type: image/jpeg\r\nContent-Length: '
+                                             + str(len(frame)).encode() + b'\r\n\r\n' + frame + b'\r\n')
+                            self.wfile.flush()
+                        else:
+                            # Heartbeat whitespace also detects disconnected idle clients.
+                            self.wfile.write(b'\r\n')
+                            self.wfile.flush()
+                except (OSError, TimeoutError):
+                    pass
             else:
                 self.send(dict(error='Not found'), status=404)
 
@@ -56,6 +79,8 @@ def make_handler(viewer):
                     viewer.pause(bool(body.get('paused', True)))
                 elif path == '/api/game/stop':
                     viewer.stop()
+                elif path == '/api/game/speed':
+                    viewer.set_speed(body.get('speed'))
                 else:
                     self.send(dict(error='Not found'), status=404)
                     return

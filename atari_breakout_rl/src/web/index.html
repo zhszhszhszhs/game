@@ -1,23 +1,48 @@
-<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Breakout · Agent 游戏演示</title>
-<style>
-:root{color-scheme:dark;--bg:#0b1019;--panel:#131d2a;--line:#29374a;--text:#eaf1fb;--muted:#94a8c0;--accent:#6ce3be}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top left,#16273a,var(--bg) 60%);color:var(--text);font:15px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif}main{max-width:1120px;margin:auto;padding:32px 24px}header{display:flex;justify-content:space-between;align-items:center;margin-bottom:24px}.eyebrow{color:var(--accent);font-size:12px;letter-spacing:2px;font-weight:700}h1{font-size:30px;margin:4px 0;letter-spacing:-1px}.muted{color:var(--muted)}.badge{padding:5px 13px;border:1px solid #345c53;color:var(--accent);border-radius:25px;font-size:13px}.layout{display:grid;grid-template-columns:minmax(320px,1.25fr) minmax(300px,1fr);gap:24px}.panel{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}.screen-panel{display:flex;flex-direction:column;align-items:center;background:#0a0f16}.screen{position:relative;width:min(100%,448px);aspect-ratio:160/210;background:#000;border-radius:4px;overflow:hidden;box-shadow:0 0 50px #0009}.screen img[hidden]{display:none}.screen img{display:block;width:100%;height:100%;object-fit:contain;image-rendering:pixelated}.placeholder{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:15px;color:var(--muted);text-align:center;padding:25px}.bricks{display:grid;grid-template-columns:repeat(5,32px);gap:4px}.bricks i{height:12px;background:#c8544e}.bricks i:nth-child(n+6){background:#c48236}.bricks i:nth-child(n+11){background:#6ca240}.caption{font-size:12px;color:var(--muted);margin-top:16px;text-align:center}h2{font-size:16px;margin:0 0 16px}label{display:block;color:var(--muted);font-size:13px;margin:16px 0 6px}select,input,button{font:inherit;border:1px solid var(--line);border-radius:8px;padding:10px 12px;background:#1a293c;color:var(--text)}select,input{width:100%;min-width:0}button{cursor:pointer}button:disabled{opacity:.5;cursor:wait}.buttons{display:flex;gap:10px;margin-top:20px}.primary{background:var(--accent);color:#09271e;border-color:var(--accent);font-weight:650;flex:1}.secondary{flex:1}button:hover{filter:brightness(1.08)}.stats{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:20px}.stat{background:#0f1723;border:1px solid var(--line);border-radius:10px;padding:13px}.stat small{color:var(--muted)}.stat strong{display:block;font-size:28px;margin-top:3px}.info{margin-top:20px;padding-top:16px;border-top:1px solid var(--line);font-size:13px;color:var(--muted)}.error{display:none;color:#ffbc9e;background:#3a251e;border:1px solid #6a4638;padding:12px;border-radius:8px;margin-top:16px}.key{color:var(--text)}.foot{margin-top:20px;color:var(--muted);font-size:12px}#agent-label{overflow-wrap:anywhere;font-size:12px}@media(max-width:760px){main{padding:20px 14px}.layout{grid-template-columns:1fr}.screen{max-width:320px}.panel{padding:18px}h1{font-size:26px}}
-</style></head><body><main>
-<header><div><div class="eyebrow">ATARI / LIVE GAMEPLAY</div><h1>Breakout 游戏演示</h1><div class="muted">观看 Agent 控制挡板，接球与击碎砖块</div></div><span id="status" class="badge">待开始</span></header>
-<div class="layout"><section class="panel screen-panel"><div class="screen"><img id="game" alt="ALE Breakout 实时游戏画面" hidden><div id="placeholder" class="placeholder"><div class="bricks"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong>选择策略，开始游戏</strong><span>这里将显示 ALE 的真实游戏画面</span></div></div><div class="caption">原生 Atari 画面 · 15 FPS · 每次决策推进 4 帧</div></section>
-<section class="panel"><h2>游戏控制</h2><label for="agent">控制策略 / 已保存模型</label><select id="agent"><option value="random">Random Agent · 随机策略</option></select><label for="seed">随机种子</label><input id="seed" type="number" min="0" max="2147483647" value="20000"><div class="buttons"><button id="start" class="primary">开始 / 重新开始</button><button id="pause" class="secondary" disabled>暂停</button><button id="stop" disabled>停止</button></div><div id="error" class="error" role="alert"></div>
-<div class="stats"><div class="stat"><small>本局得分</small><strong id="reward">0</strong></div><div class="stat"><small>剩余生命</small><strong id="lives">—</strong></div><div class="stat"><small>游戏局数</small><strong id="episode">0</strong></div><div class="stat"><small>Agent 当前动作</small><strong id="action" style="font-size:22px">—</strong></div></div>
-<div class="info"><div>决策步数：<span class="key" id="length">0</span></div><div>上一局得分：<span class="key" id="last-reward">—</span></div><div style="margin-top:8px">当前策略：</div><div class="key" id="agent-label">尚未启动</div></div>
-<div class="info">DQN 使用已保存的模型和贪心动作，在 CPU 上独立演示；不会更新模型参数，也不会暂停 GPU 训练。每局结束后自动开始下一局。</div><div class="info">环境在开局和丢失生命后自动发球，Agent 负责挡板动作。早期模型仍可能频繁漏球；自动发球并不代表模型已学会接球。</div>
-</section></div><div class="foot">通过 SSH 端口转发访问。仅实时显示画面，不录制视频。关闭页面不会自动停止演示；离开前可点击“停止”。同一个服务器页面共享一场演示。</div></main>
-<script>
-const $=id=>document.getElementById(id);let current=null,frameBusy=false,refreshBusy=false,commandBusy=false;
-const statuses={idle:'待开始',loading:'正在加载模型',playing:'游戏进行中',paused:'已暂停',episode_end:'本局结束',stopped:'已停止',error:'运行错误'};
-function error(message){$('error').textContent=message;$('error').style.display=message?'block':'none'}
-function render(s){current=s;$('status').textContent=statuses[s.status]||s.status;for(const key of ['reward','lives','episode','action','length'])$(key).textContent=(s[key]==null?'—':s[key]);$('last-reward').textContent=(s.last_reward==null?'—':s.last_reward);$('agent-label').textContent=s.agent==='random'?'Random Agent · 随机策略':s.agent;$('pause').textContent=s.status==='paused'?'继续':'暂停';$('pause').disabled=!['playing','paused'].includes(s.status);$('stop').disabled=['idle','stopped','error'].includes(s.status);$('start').disabled=commandBusy||s.status==='loading';const selected=$('agent').value;const options=['random',...s.models];if(JSON.stringify(options)!==JSON.stringify([...$('agent').options].map(o=>o.value))){$('agent').replaceChildren(...options.map(v=>{const o=document.createElement('option');o.value=v;o.textContent=v==='random'?'Random Agent · 随机策略':v;return o}));$('agent').value=options.includes(selected)?selected:'random'}if(s.error)error(s.error);if(s.frame_ready){$('game').hidden=false;$('placeholder').style.display='none'}else{$('game').hidden=true;$('placeholder').style.display='flex'}}
-async function refresh(){if(refreshBusy)return;refreshBusy=true;try{const r=await fetch('/api/game/state');if(!r.ok)throw Error('读取游戏状态失败');render(await r.json())}catch(e){error(e.message)}finally{refreshBusy=false}}
-async function command(path,body){if(commandBusy)return;commandBusy=true;$('start').disabled=true;error('');try{const r=await fetch('/api/game/'+path,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});const s=await r.json();if(!r.ok)throw Error(s.error);render(s)}catch(e){error(e.message)}finally{commandBusy=false;refresh()}}
-$('start').onclick=()=>command('start',{agent:$('agent').value,seed:Number($('seed').value)});$('pause').onclick=()=>command('pause',{paused:(current&&current.status)!=='paused'});$('stop').onclick=()=>command('stop',{});
-$('game').onload=()=>frameBusy=false;$('game').onerror=()=>frameBusy=false;
-setInterval(()=>{if((current&&current.frame_ready)&&!frameBusy&&!document.hidden){frameBusy=true;$('game').src='/api/game/frame?t='+Date.now()}},67);
-refresh();setInterval(refresh,500);
-</script></body></html>
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Breakout · Agent 游戏演示</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+<main>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Breakout 首页"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span>BREAKOUT<span class="brand-sub">REINFORCEMENT LEARNING LAB</span></span></a>
+    <div class="connection" id="connection" role="status"><span class="dot"></span><span id="connection-label">正在连接</span></div>
+  </header>
+  <section class="intro"><div><div class="eyebrow">从像素到策略</div><h1>Breakout 游戏演示<span>.</span></h1><p>真实 Atari 画面，实时模型推理。观察接球、反弹，以及下一块被击碎的砖。</p></div><span class="outline-tag">DQN × BREAKOUT</span></section>
+  <div class="layout">
+    <section class="arena panel" id="arena" aria-label="实时游戏画面">
+      <div class="arena-header"><div><span class="live-dot"></span> LIVE PLAY <span class="arena-mode" id="arena-mode">准备就绪</span></div><button class="icon-button" id="fullscreen" title="全屏显示（F）" aria-label="全屏显示">⛶ <span>全屏</span></button></div>
+      <div class="screen-wrap">
+        <div class="screen"><img id="game" alt="ALE Breakout 实时游戏画面" hidden><div class="placeholder" id="placeholder"><div class="brick-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong id="placeholder-title">准备好，看它开始学习的成果</strong><span id="placeholder-copy">选择模型，点击「开始演示」</span></div><div class="screen-overlay" id="overlay" hidden><span id="overlay-text">已暂停</span></div></div>
+      </div>
+      <div class="arena-footer"><span><span class="tiny-dot"></span>真实 ALE 帧 <span class="separator">/</span> <span id="fps">—</span></span><span id="playback">1× 播放</span><span class="keyboard-hint"><kbd>Space</kbd> 暂停 <kbd>F</kbd> 全屏</span></div>
+    </section>
+    <aside class="sidebar">
+      <section class="panel control-panel">
+        <div class="section-heading"><h2>演示控制</h2><span class="status-badge" id="status">待开始</span></div>
+        <label for="agent">选择 Agent</label><select id="agent"><option value="random">Random · 随机策略</option></select>
+        <div class="model-note" id="model-note">默认推荐本轮最佳模型，也可以切换随机策略作直观对比。</div>
+        <div class="settings-row"><div><label for="seed">起始种子</label><input id="seed" type="number" min="0" max="2147483647" value="20000"></div><div><label for="speed">播放速度</label><select id="speed"><option value="0.5">0.5× 慢速观察</option><option value="1" selected>1× 原速</option><option value="2">2× 快速播放</option></select></div></div>
+        <div class="buttons"><button id="start" class="primary">▶ 开始演示</button><button id="pause" class="secondary" disabled>暂停</button><button id="stop" class="secondary" disabled>停止</button></div>
+        <div id="error" class="error" role="alert" hidden></div>
+      </section>
+      <section class="panel telemetry">
+        <div class="section-heading"><h2>这一局</h2><span class="micro" id="episode">EPISODE —</span></div>
+        <div class="score-row"><div><span class="stat-label">当前得分</span><strong id="reward">0</strong></div><div class="lives-block"><span class="stat-label">剩余生命</span><div id="lives" aria-label="剩余生命">—</div></div></div>
+        <div class="metrics"><div><span>游戏时间</span><strong id="game-time">00:00</strong></div><div><span>决策步数</span><strong id="length">0</strong></div><div><span>上一局得分</span><strong id="last-reward">—</strong></div></div>
+        <div class="action-heading"><span class="stat-label">Agent 当前动作</span><span class="micro" id="auto-fire"></span></div>
+        <div class="action-pad" aria-label="当前模型动作"><span data-action="NOOP">·<small>等待</small></span><span data-action="FIRE">↗<small>发球</small></span><span data-action="LEFT">←<small>左移</small></span><span data-action="RIGHT">→<small>右移</small></span></div>
+        <div class="action-description" id="action-description">等待模型开始决策</div>
+      </section>
+      <section class="panel history-panel"><div class="section-heading"><h2>最近完成的游戏</h2><span class="micro">本次演示 · 最近 10 局</span></div><div class="history-empty" id="history-empty">一局结束后，得分会出现在这里。</div><div id="history" class="history" aria-label="最近游戏得分"></div><p class="history-note">展示得分仅供观察，不代替独立评估。</p></section>
+    </aside>
+  </div>
+  <section class="details"><div><span class="detail-label">正在运行</span><strong id="agent-label">尚未启动</strong></div><div><span class="detail-label">观察与决策</span><strong>4 帧图像 · CNN · 离散动作</strong></div><div><span class="detail-label">演示规则</span><strong>原生奖励 · 丢球自动发球</strong></div></section>
+  <footer><span>独立 CPU 推理 · 不更新模型 · 不录制视频</span><span>离开前可点击「停止」；关闭页面后服务器仍会继续演示。</span></footer>
+</main>
+</body>
+</html>
