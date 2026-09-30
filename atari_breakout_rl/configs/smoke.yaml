@@ -1,0 +1,18 @@
+# Pipeline validation only, not a claim of learned performance.
+total_timesteps: 10000
+seed: 42
+learning_rate: 0.0001
+buffer_size: 5000
+learning_starts: 1000
+batch_size: 32
+gamma: 0.99
+train_freq: 4
+gradient_steps: 1
+target_update_interval: 1000
+exploration_fraction: 0.5
+exploration_final_eps: 0.05
+device: auto
+checkpoint_freq: 5000
+eval_freq: 10000
+n_eval_episodes: 1
+threads: 2
