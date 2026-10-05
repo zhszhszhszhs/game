@@ -4,7 +4,7 @@ from pathlib import Path
 
 import imageio.v2 as imageio
 from stable_baselines3 import DQN
-from env import ENV_SPEC, make_env
+from env import environment_spec, make_env
 from utils import ROOT, setup, write_json
 
 
@@ -22,10 +22,13 @@ def main():
     device = setup(args.seed, args.device)
     args.output_dir.mkdir(parents=True, exist_ok=True)
     name = args.name or ('dqn_final' if args.model else 'random_agent')
+    model = DQN.load(args.model, device=device) if args.model else None
+    spec = environment_spec(model)
     env = make_env(args.seed, render_mode='rgb_array')
     records = []
     try:
-        model = DQN.load(args.model, env=env, device=device) if args.model else None
+        if model is not None:
+            model.set_env(env)
         for episode in range(args.episodes):
             seed = args.seed + episode
             env.seed(seed)
@@ -51,7 +54,7 @@ def main():
             records.append(dict(video=str(path), seed=seed, reward=total, length=length))
             print(records[-1], flush=True)
         write_json(args.output_dir / f'{name}_metadata.json', dict(
-            model=str(args.model) if args.model else None, environment=ENV_SPEC,
+            model=str(args.model) if args.model else None, environment=spec,
             fps=15, episodes=records))
     finally:
         env.close()

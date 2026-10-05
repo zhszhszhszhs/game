@@ -1,4 +1,4 @@
-"""Live ALE playback: native intermediate frames, CPU inference, no recording."""
+"""Live Breakout playback: actual physics frames, CPU inference, no recording."""
 import io
 from pathlib import Path
 import threading
@@ -27,7 +27,9 @@ class GameViewer:
     def models(self):
         paths = sorted(self.model_dir.rglob('*.zip'), key=lambda p: p.stat().st_mtime, reverse=True)
         return [str(p.relative_to(self.model_dir)) for p in paths
-                if p.resolve().is_relative_to(self.model_dir.resolve())]
+                if p.resolve().is_relative_to(self.model_dir.resolve())
+                and p.relative_to(self.model_dir).parts[0].startswith('dqn_custom_fixed_angle_')
+                and 'smoke' not in p.relative_to(self.model_dir).parts[0]]
 
     def snapshot(self):
         with self.lock:
@@ -37,9 +39,11 @@ class GameViewer:
             if state['status'] in ('playing', 'paused'):
                 state['status'] = 'paused' if self.pause_event.is_set() else 'playing'
         state['models'] = self.models()
-        preferred = 'dqn_revised_500k/best_model/best_model.zip'
+        # The recommended model is selected by evaluation, not file modification time.
+        preferred = 'dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip'
         state['recommended_model'] = preferred if preferred in state['models'] else next(
-            (m for m in state['models'] if m.endswith('best_model.zip')), 'random')
+            (m for m in state['models'] if m.startswith('dqn_custom_fixed_angle_') and 'smoke' not in m
+             and m.endswith('best_model.zip')), 'random')
         return state
 
     def image(self):
@@ -116,7 +120,7 @@ class GameViewer:
         env = None
         try:
             from stable_baselines3 import DQN
-            from env import make_env
+            from env import environment_spec, get_lives, make_env
             from utils import setup
             setup(seed, 'cpu', threads=1)
             frames, capturing = [], False
@@ -128,8 +132,13 @@ class GameViewer:
                 elif capturing:
                     frames.append((frame.copy(), reward, lives))
 
+            model = None if agent == 'random' else DQN.load(self.model_dir / agent, device='cpu')
+            spec = environment_spec(model)
             env = make_env(seed, render_mode='rgb_array', frame_callback=capture)
-            model = None if agent == 'random' else DQN.load(self.model_dir / agent, env=env, device='cpu')
+            if model is not None:
+                model.set_env(env)
+            with self.lock:
+                self.state['environment'] = spec
             meanings = env.env_method('get_action_meanings')[0]
             episode, last_reward, history = 0, None, []
             while not self.stop_event.is_set():
@@ -142,7 +151,7 @@ class GameViewer:
                 self._publish(env.get_images()[0], status='playing', episode=episode,
                               episode_seed=episode_seed, reward=0, length=0, action='—',
                               last_reward=last_reward, game_seconds=0, auto_fire_count=0,
-                              lives=env.venv.venv.envs[0].unwrapped.ale.lives())
+                              lives=get_lives(env.venv.venv.envs[0]))
                 while self._ready():
                     started = time.monotonic()
                     action = [env.action_space.sample()] if model is None else model.predict(observation, deterministic=True)[0]
@@ -152,7 +161,7 @@ class GameViewer:
                     capturing = False
                     length += 1
                     label = meanings[int(action[0])]
-                    if infos[0].get('ale_auto_fire'):
+                    if infos[0].get('auto_fire'):
                         label += ' + 自动发球'
                         auto_fires += 1
                     displayed_reward = total

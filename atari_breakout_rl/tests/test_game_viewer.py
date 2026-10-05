@@ -1,4 +1,4 @@
-"""The viewer must render actual ALE frames and pause without advancing the game."""
+"""The viewer must render actual physics frames and pause without advancing the game."""
 import io
 from pathlib import Path
 import sys

@@ -25,7 +25,7 @@ def main():
 
     connected = False
     try:
-        assert 'Agent 游戏演示' in request('/').decode()
+        assert 'Breakout 游戏演示' in request('/').decode()
         assert '.screen' in request('/style.css').decode()
         assert '/api/game/stream' in request('/app.js').decode()
         connected = True

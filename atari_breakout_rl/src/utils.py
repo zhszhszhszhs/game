@@ -51,7 +51,7 @@ def summary(rows):
 
 def versions():
     return dict(python=platform.python_version(),
-                packages={p: version(p) for p in ['torch', 'gymnasium', 'ale-py',
+                packages={p: version(p) for p in ['torch', 'gymnasium',
                           'stable-baselines3', 'numpy', 'matplotlib', 'tensorboard']},
                 cuda_available=torch.cuda.is_available(),
                 cuda_device=torch.cuda.get_device_name(0) if torch.cuda.is_available() else None)

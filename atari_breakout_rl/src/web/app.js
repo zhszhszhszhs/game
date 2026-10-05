@@ -5,7 +5,7 @@ let current = null, commandBusy = false, refreshing = false, initialized = false
 let previousFrame = null, previousTime = null, previousHistory = '', streamConnected = false;
 function showError(message) { $('error').textContent = message || ''; $('error').hidden = !message; }
 function modelLabel(path) {
-  if (path === 'random') return 'Random · 随机策略';
+  if (path === 'random') return 'Random · 自制固定球速';
   const parts = path.split('/'), run = parts[0], file = parts[parts.length - 1];
   let kind = file === 'best_model.zip' ? '最佳模型' : file === 'final_model.zip' ? '最终模型' : file;
   const match = file.match(/_(\d+)_steps/);
@@ -38,6 +38,8 @@ function render(s) {
   $('auto-fire').textContent = s.auto_fire_count ? `本局自动发球 ${s.auto_fire_count} 次` : '';
   $('action-description').textContent = s.action.includes('自动发球') ? '丢失生命后，环境自动重新发球' : `当前动作：${s.action} · 每个决策最多重复 4 帧`;
   $('agent-label').textContent = s.status==='idle' ? '尚未启动' : s.agent;
+  $('environment-rule').textContent = '固定球速 120 px/s · 固定挡板 16 px · 角度不受击球次数影响';
+  $('frame-source').textContent = '固定球速 · 实时游戏帧';
   $('pause').textContent = s.status==='paused' ? '继续' : '暂停';
   $('pause').disabled = commandBusy || !['playing','paused'].includes(s.status);
   $('stop').disabled = commandBusy || ['idle','stopped','error'].includes(s.status);

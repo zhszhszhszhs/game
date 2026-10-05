@@ -12,20 +12,20 @@
     <a class="brand" href="/" aria-label="Breakout 首页"><span class="brand-icon" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i></span><span>BREAKOUT<span class="brand-sub">REINFORCEMENT LEARNING LAB</span></span></a>
     <div class="connection" id="connection" role="status"><span class="dot"></span><span id="connection-label">正在连接</span></div>
   </header>
-  <section class="intro"><div><div class="eyebrow">从像素到策略</div><h1>Breakout 游戏演示<span>.</span></h1><p>真实 Atari 画面，实时模型推理。观察接球、反弹，以及下一块被击碎的砖。</p></div><span class="outline-tag">DQN × BREAKOUT</span></section>
+  <section class="intro"><div><div class="eyebrow">从像素到策略</div><h1>Breakout 游戏演示<span>.</span></h1><p>自制固定球速打砖块，实时展示策略动作。观察接球、反弹，以及下一块被击碎的砖。</p></div><span class="outline-tag">DQN × BREAKOUT</span></section>
   <div class="layout">
     <section class="arena panel" id="arena" aria-label="实时游戏画面">
       <div class="arena-header"><div><span class="live-dot"></span> LIVE PLAY <span class="arena-mode" id="arena-mode">准备就绪</span></div><button class="icon-button" id="fullscreen" title="全屏显示（F）" aria-label="全屏显示">⛶ <span>全屏</span></button></div>
       <div class="screen-wrap">
-        <div class="screen"><img id="game" alt="ALE Breakout 实时游戏画面" hidden><div class="placeholder" id="placeholder"><div class="brick-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong id="placeholder-title">准备好，看它开始学习的成果</strong><span id="placeholder-copy">选择模型，点击「开始演示」</span></div><div class="screen-overlay" id="overlay" hidden><span id="overlay-text">已暂停</span></div></div>
+        <div class="screen"><img id="game" alt="Breakout 实时游戏画面" hidden><div class="placeholder" id="placeholder"><div class="brick-art" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><strong id="placeholder-title">准备好，看它开始学习的成果</strong><span id="placeholder-copy">选择模型，点击「开始演示」</span></div><div class="screen-overlay" id="overlay" hidden><span id="overlay-text">已暂停</span></div></div>
       </div>
-      <div class="arena-footer"><span><span class="tiny-dot"></span>真实 ALE 帧 <span class="separator">/</span> <span id="fps">—</span></span><span id="playback">1× 播放</span><span class="keyboard-hint"><kbd>Space</kbd> 暂停 <kbd>F</kbd> 全屏</span></div>
+      <div class="arena-footer"><span><span class="tiny-dot"></span><span id="frame-source">实时游戏帧</span> <span class="separator">/</span> <span id="fps">—</span></span><span id="playback">1× 播放</span><span class="keyboard-hint"><kbd>Space</kbd> 暂停 <kbd>F</kbd> 全屏</span></div>
     </section>
     <aside class="sidebar">
       <section class="panel control-panel">
         <div class="section-heading"><h2>演示控制</h2><span class="status-badge" id="status">待开始</span></div>
         <label for="agent">选择 Agent</label><select id="agent"><option value="random">Random · 随机策略</option></select>
-        <div class="model-note" id="model-note">默认推荐本轮最佳模型，也可以切换随机策略作直观对比。</div>
+        <div class="model-note" id="model-note">选择训练模型或随机策略，观看实时游戏过程。</div>
         <div class="settings-row"><div><label for="seed">起始种子</label><input id="seed" type="number" min="0" max="2147483647" value="20000"></div><div><label for="speed">播放速度</label><select id="speed"><option value="0.5">0.5× 慢速观察</option><option value="1" selected>1× 原速</option><option value="2">2× 快速播放</option></select></div></div>
         <div class="buttons"><button id="start" class="primary">▶ 开始演示</button><button id="pause" class="secondary" disabled>暂停</button><button id="stop" class="secondary" disabled>停止</button></div>
         <div id="error" class="error" role="alert" hidden></div>
@@ -41,7 +41,7 @@
       <section class="panel history-panel"><div class="section-heading"><h2>最近完成的游戏</h2><span class="micro">本次演示 · 最近 10 局</span></div><div class="history-empty" id="history-empty">一局结束后，得分会出现在这里。</div><div id="history" class="history" aria-label="最近游戏得分"></div><p class="history-note">展示得分仅供观察，不代替独立评估。</p></section>
     </aside>
   </div>
-  <section class="details"><div><span class="detail-label">正在运行</span><strong id="agent-label">尚未启动</strong></div><div><span class="detail-label">观察与决策</span><strong>4 帧图像 · CNN · 离散动作</strong></div><div><span class="detail-label">演示规则</span><strong>原生奖励 · 丢球自动发球</strong></div></section>
+  <section class="details"><div><span class="detail-label">正在运行</span><strong id="agent-label">尚未启动</strong></div><div><span class="detail-label">观察与决策</span><strong>4 帧图像 · CNN · 离散动作</strong></div><div><span class="detail-label">演示规则</span><strong id="environment-rule">原生奖励 · 丢球自动发球</strong></div></section>
   <footer><span>独立 CPU 推理 · 不更新模型 · 不录制视频</span><span>离开前可点击「停止」；关闭页面后服务器仍会继续演示。</span></footer>
 </main>
 </body>

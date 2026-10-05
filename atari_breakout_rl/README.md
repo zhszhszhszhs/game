@@ -1,139 +1,101 @@
-# 基于 DQN 的 Atari Breakout 智能体
+# 基于 DQN 的 Breakout 智能体
 
-Deep Reinforcement Learning for Atari Breakout Using Deep Q-Network
-
-研究生强化学习课程项目，使用 Gymnasium + ALE 运行游戏，Stable-Baselines3 DQN（CnnPolicy）学习控制挡板。提供训练、随机基线、模型评估和网页游戏演示。
+研究生强化学习课程项目：自制固定球速 Breakout + Gymnasium + Stable-Baselines3 DQN（CnnPolicy）。强化学习方法讲解见 [技术报告](TECHNICAL_REPORT.md)，修改与实验结果见 [修改汇总](CHANGE_SUMMARY.md)。
 
 ## 安装
 
-推荐 Python 3.11。在项目目录执行：
+使用 Python 3.10/3.11，进入项目目录：
 
 ```bash
-python3.11 -m venv .venv
+python -m venv .venv
 source .venv/bin/activate
-python -m pip install --upgrade pip
 python -m pip install torch --index-url https://download.pytorch.org/whl/cu126
 python -m pip install -r requirements.txt
 python -m pip check
 ```
 
-CPU 环境将 PyTorch 下载源换成 `https://download.pytorch.org/whl/cpu`。现代 ale-py wheel 包含 ROM，无需安装旧版 Gym 或 AutoROM。本机已安装的环境可直接用 `/data/zhs/game/.venv/bin/python`；精确版本见 `requirements-lock.txt`。
+CPU 环境将 PyTorch 下载源换成 `https://download.pytorch.org/whl/cpu`。当前服务器解释器为 `/data/zhs/game/.venv/bin/python`；本机依赖快照见 `requirements-lock.txt`。
 
-## 环境与方法
+## 游戏和输入
 
-- 状态：RGB 画面经过跳帧、最大池化、灰度化、缩放、4 帧堆叠，得到 `4×84×84` 图像。
-- 动作：从环境读取 NOOP、FIRE、RIGHT、LEFT 的编号。
-- 奖励：ALE 原生得分，不裁剪、不增加 shaping；所有生命耗尽才算完整游戏结束，保留时间上限。
-- 统一预处理：ALE `frameskip=1`，SB3 AtariWrapper 跳帧 4 次，避免重复跳帧；开局和丢失生命后自动发球。
-- 训练、评估和网页演示共用 `src/env.py`。关闭 sticky actions，结果不直接对比 ALE-v5 默认协议榜单。
+游戏采用五条生命、6×18 块砖、两面砖墙，每排奖励为 7/7/4/4/1/1，最高分 864。球速固定 120 px/s，挡板固定 16 px，反弹角度由接球位置决定，不随击球次数变化。发球位置和方向由种子生成，开局及丢球后自动发球；奖励来自击砖，无奖励塑形。几何、碰撞和反弹是自制规则重建，当前物理版本为 3。
 
-CNN 提取画面特征，Online Q Network 预测各动作的折扣累计回报。Replay Buffer 随机抽取历史经验；Target Q Network 定期同步参数，提供较稳定的学习目标；ε-greedy 在随机探索和贪心动作之间选择。
+共享预处理：RGB 210×160×3 → 重复动作 4 帧并最大池化 → SB3 WarpFrame 灰度缩放 → 堆叠 4 帧 → uint8 4×84×84。动作含义从环境读取。完整游戏结束才终止，108000 物理帧时间上限为截断。
 
-```text
-y = r + γ × (1 - terminated) × max_a Q_target(s_next, a)
-```
-
-教学中的平方 TD 误差为 `E[(y - Q(s,a))²]`；SB3 实际使用 Huber loss，通过 Adam 梯度更新网络。
-
-## 运行
-
-以下命令在项目目录执行，每次新训练使用不同的 `--run-name`。
-
-### 环境检查与随机基线
+## 检查、随机基线和训练
 
 ```bash
-python src/env.py --raw --seed 42
-python src/env.py --seed 42
+python src/env.py --raw
+python src/env.py
 python -m unittest discover -s tests -v
-python src/random_agent.py --episodes 20 --seed 10000
-```
+python src/random_agent.py --episodes 20 --seed 30000
 
-环境检查运行完整一局并打印动作含义与输入形状；预处理后的批次形状应为 `(1, 4, 84, 84)`。桌面环境可加 `--human`。
+# 短训练验证接口
+python src/train.py --run-name dqn_custom_fixed_angle_smoke_new \
+  --total-timesteps 10000 --buffer-size 5000 --learning-starts 1000 \
+  --eval-freq 5000 --checkpoint-freq 5000 --n-eval-episodes 3
 
-### 训练与进度
-
-```bash
-# 10k 步接口验证
-python src/train.py --config configs/smoke.yaml --run-name smoke_new
-
-# 后台启动新的 500k 步训练
-python src/launch_training.py --config configs/dqn.yaml   --run-name dqn_new_500k --device auto
-
-# 查询已经启动的修正训练
-python src/launch_training.py --run-name dqn_revised_500k --status
-
-# 训练指标
+# 从头训练；每次实验使用新的 run-name
+python src/launch_training.py --config configs/dqn_custom.yaml \
+  --run-name dqn_custom_fixed_angle_new --device auto
+python src/launch_training.py --run-name dqn_custom_fixed_angle_new --status
+tail -f logs/dqn_custom_fixed_angle_new.console.log
 tensorboard --logdir logs/ --host 127.0.0.1 --port 6006
 ```
 
-`auto` 自动选择 CUDA 或 CPU，也可指定 `--device cuda:0`。参数集中在 `configs/dqn.yaml`，命令行可覆盖，完整选项见 `python src/train.py --help`。
+参数可由命令行覆盖，详见 `python src/train.py --help`。`auto` 自动选择 CUDA 或 CPU。基础配置预算 500k；DQN 使用 CNN、经验回放、目标网络、ε-greedy、Huber loss 和 Adam。训练保存 checkpoint、均分最佳及中位数最佳模型。训练预算不保证收敛。
 
-当前修正阶段 `dqn_revised_500k` 从旧 150k 最佳模型加载，计划额外训练 500k 步。已修复丢球后等待发球的问题；经验池增至 100k，先收集 50k 步经验，ε 在前 300k 步降至 0.05，Target Network 每 1k 步同步。修正后的 10k 短训练已通过，不能据此认定已经学好。
+## 最佳模型和续训
 
-实时进度以 `logs/<run>/runtime.json` 和 `logs/<run>.console.log` 为准，不在文档中维护步数快照。每 50k 步保存 checkpoint，并进行 5 局开发评估以选择最佳模型。TensorBoard 包含 reward、episode length、epsilon、loss 和 learning rate；warm-up 阶段没有 loss 属正常现象。
-
-续训示例（模型存在后使用）：
+当前推荐模型：`models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip`。50 局开发评估均分 283.48，额外相同的 30 个开发种子复测均分 260.27；两套评估分别报告。后续三步回报与扩大回放实验均未超过起点，已早停。最终独立测试尚未完成。
 
 ```bash
-python src/launch_training.py --run-name dqn_continue   --resume models/dqn_revised_500k/final_model.zip   --total-timesteps 500000 --device auto
+python src/launch_training.py --config configs/dqn_custom_refine.yaml \
+  --run-name dqn_custom_fixed_angle_refine_new \
+  --resume models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip
 ```
 
-续训步数表示新增步数。默认重新计步并重启探索日程；可用 `--no-reset-timesteps` 保留累计计数。模型 ZIP 不含经验池，缺少 replay 时会重新收集经验；使用 `--replay-buffer 路径.pkl` 可加载匹配的经验池。
+续训配置用原策略预热新 replay，开始前评估起点，连续 3 次未创新高自动早停；预热不消耗早停耐心。均分最佳模型同步保存压缩 replay。模型 ZIP 不包含 replay，有配套 replay 时可传 `--replay-buffer 路径`，其环境、容量及回报跨度必须匹配。`--n-steps` 保留多步回报实验能力。
 
-默认在结束或可捕获中断时保存 replay，100k 图像经验池约占 5.64 GB 内存及相近磁盘空间；周期 checkpoint 只保存模型。前台 Ctrl+C 或对后台训练 PID 发送 SIGTERM 会保存中断模型，强制终止无法保证保存。
+`total-timesteps` 表示本阶段新增步数。50k 图像回放约占 2.8 GB 系统内存；压缩只减少磁盘占用。Ctrl+C/SIGTERM 保存中断产物。
 
-### 网页游戏界面
-
-服务器启动：
+## 网页展示
 
 ```bash
 python src/dashboard.py --port 8501
-```
-
-本地电脑转发端口：
-
-```bash
+# 在本地电脑执行
 ssh -N -L 8501:127.0.0.1:8501 用户名@服务器地址
 ```
 
-浏览器打开 **http://127.0.0.1:8501**。也可使用 VS Code 的端口转发。页面展示真实游戏画面，可选择随机策略或模型，开始、暂停、停止。演示使用独立 CPU 推理，不更新模型；要观看新 checkpoint，选择后重新开始。
+打开 **http://127.0.0.1:8501**，也可通过 VS Code 转发 8501。页面名称为「Breakout 游戏演示」，支持模型选择、随机策略、暂停、全屏和播放倍率。1× 对应目标 60 个物理帧/秒，CPU 推理。列表展示当前任务的正式模型；历史模型和短训练验证产物不进入列表。
 
-界面默认推荐最佳模型，显示得分、生命、动作和最近 10 局成绩；支持 0.5×/1×/2× 速度、全屏（F）及暂停（空格）。原速目标为每秒 60 个真实 ALE 帧，通过连续画面流传输；模型仍每 4 帧决策，实际显示流畅度取决于服务器和连接速度。演示成绩不替代独立测试。
-
-### 后续评估、绘图与视频
-
-以下脚本已提供，按当前要求暂不执行：
+## 评估、绘图和视频
 
 ```bash
-python src/evaluate.py --model models/dqn_revised_500k/best_model/best_model.zip   --episodes 50 --seed 10000 --compare-random
-python src/plot_results.py --log-dir logs/dqn_revised_500k --window 100
-python src/record_video.py --episodes 3 --name random_agent
-python src/record_video.py --model models/dqn_revised_500k/best_model/best_model.zip   --episodes 3 --name dqn_final
+python src/evaluate.py \
+  --model models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip \
+  --episodes 50 --seed 10000 --compare-random --output-dir results/evaluation/custom_final
 ```
 
-独立评估使用贪心动作，与随机策略采用相同环境和 episode seeds，输出逐局得分、长度及统计对比。绘图生成 reward、平滑 reward、episode length 和 DQN/Random 对比图。旧实验未使用丢球自动发球规则，旧随机基线需要按新规则重测后再比较；训练探索得分也不能代替独立测试得分。
+Random 和 DQN 使用相同环境及逐局种子。开发数据用于选模型，最终测试使用留出的种子。绘图与视频按需执行：
 
-## 文件与输出
+```bash
+python src/plot_results.py --log-dir logs/dqn_custom_fixed_angle_refine_200k --window 100
+python src/record_video.py \
+  --model models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip --name dqn_final
+```
 
-| 位置 | 内容 |
+## 目录与排错
+
+| 目录 | 用途 |
 |---|---|
-| `src/` | 环境、训练、回调、后台启动、评估、绘图、视频和网页代码 |
-| `configs/dqn.yaml` / `configs/smoke.yaml` | 正式训练 / 短训练配置 |
-| `tests/` | 环境接口、模型保存加载和网页测试 |
-| `models/<run>/` | `checkpoints/`、`best_model/best_model.zip`、最终或中断模型、replay |
-| `logs/<run>/` | 实验配置、Monitor CSV、TensorBoard、运行状态和训练总结 |
-| `results/evaluation/` | 逐局 CSV、统计 JSON、Random/DQN 对比 |
-| `results/figures/` / `results/videos/` | 报告图片 / 游戏视频 |
+| `src/`、`src/web/` | 游戏、预处理、训练、评估、网页、绘图与视频入口 |
+| `configs/` | 从头训练与续训两份配置 |
+| `tests/` | 游戏物理、模型接口、回放、回调和网页检查 |
+| `models/<run>/` | 模型、checkpoint、replay；历史正式实验产物保留 |
+| `logs/<run>/` | 配置快照、TensorBoard、进程状态、评估与训练总结 |
+| `results/` | evaluation、figures、videos |
 
-## 常见问题
+CUDA 不可用时在宿主环境检查 `nvidia-smi` 和 PyTorch；沙箱看不到 GPU 不代表 GPU 故障。内存不足时降低 buffer-size。没有 loss 时检查是否超过 learning-starts。原始 Gymnasium step 返回 5 项，SB3 VecEnv 返回 4 项；共享环境工厂处理跳帧、堆帧和终止。
 
-| 问题 | 处理 |
-|---|---|
-| ALE environment / ROM not found | 确认 Python 环境和 ale-py 安装正确；使用 `gym.register_envs(ale_py)` 与 `ALE/Breakout-v5` |
-| render 错误 | SSH 环境使用默认 RGB 渲染或网页，不加 `--human` |
-| CUDA unavailable | 在同一运行环境检查 `nvidia-smi`、PyTorch CUDA 版本及设备权限；沙箱看不到 GPU 不代表宿主 GPU 故障 |
-| Gym API / wrapper 不兼容 | 使用 Gymnasium；原始 step 返回 5 项，SB3 VecEnv 返回 4 项；共用 `make_env`，不要重复添加跳帧或堆帧 |
-| 内存不足 | 减小 `--buffer-size`；经验池主要占系统内存 |
-| 没有 loss / TensorBoard 为空 | 检查是否超过 learning_starts，以及日志目录是否正确 |
-
-参考：[SB3 DQN](https://stable-baselines3.readthedocs.io/en/master/modules/dqn.html)、[ALE](https://ale.farama.org/getting-started/)、[SB3 Zoo Atari 配置](https://github.com/DLR-RM/rl-baselines3-zoo/blob/master/hyperparams/dqn.yml)。
+当前代码只支持物理版本 3，旧 ALE 或旧规则模型会明确拒绝加载。历史实验参数在各日志的 `config.json` 中；训练与网页启动前先激活 Python 环境。

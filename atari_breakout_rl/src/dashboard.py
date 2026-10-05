@@ -1,4 +1,4 @@
-"""Live ALE game interface, served on localhost for SSH port forwarding."""
+"""Live Breakout game interface, served on localhost for SSH port forwarding."""
 import argparse
 import json
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
