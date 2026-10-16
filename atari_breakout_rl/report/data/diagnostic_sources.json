@@ -1,0 +1,14 @@
+[
+  {
+    "run": "dqn_custom_fixed_angle_500k",
+    "exploration_points": 793,
+    "loss_points": 741,
+    "best_step": 350000
+  },
+  {
+    "run": "dqn_custom_fixed_angle_refine_200k",
+    "exploration_points": 223,
+    "loss_points": 194,
+    "best_step": 25000
+  }
+]

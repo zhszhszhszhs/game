@@ -1,0 +1,55 @@
+{
+  "episodes": 30,
+  "statistics": [
+    {
+      "model": "最佳模型",
+      "mean": 260.26666666666665,
+      "std": 103.74710705471368,
+      "median": 257.0,
+      "p10": 111.9,
+      "p25": 210.0,
+      "below_50": 1,
+      "below_50_fraction": 0.03333333333333333,
+      "min": 36.0,
+      "max": 444.0,
+      "timeout_count": 0,
+      "full_clear_count": 0,
+      "mean_episode_length": 1943.6666666666667
+    },
+    {
+      "model": "续训最终模型",
+      "mean": 122.4,
+      "std": 90.62582413418373,
+      "median": 101.5,
+      "p10": 19.9,
+      "p25": 36.75,
+      "below_50": 9,
+      "below_50_fraction": 0.3,
+      "min": 3.0,
+      "max": 345.0,
+      "timeout_count": 0,
+      "full_clear_count": 0,
+      "mean_episode_length": 1202.5
+    }
+  ],
+  "bootstrap_seed": 20261017,
+  "bootstrap_repetitions": 20000,
+  "bootstrap_unit": "paired_episode_seed",
+  "mean_paired_difference": 137.86666666666667,
+  "paired_bootstrap_95pct_ci": [
+    95.76666666666667,
+    177.43416666666658
+  ],
+  "best_wins": 28,
+  "losing_seeds": [
+    {
+      "seed": 42001,
+      "difference": -198.0
+    },
+    {
+      "seed": 42013,
+      "difference": -9.0
+    }
+  ],
+  "purpose": "conditional_development_diagnosis_not_final_test"
+}

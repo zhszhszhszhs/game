@@ -1,0 +1,107 @@
+{
+  "date": "2026-10-17",
+  "purpose": "report_figures_from_existing_logs_and_development_rollouts",
+  "models": {
+    "best": {
+      "path": "models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip",
+      "sha256": "1614da2225bb1698b6778705d0db686bd778295c5995f204421efac835e985a9"
+    },
+    "final": {
+      "path": "models/dqn_custom_fixed_angle_refine_200k/final_model.zip",
+      "sha256": "c135e79faa17cd388bb9f53448fb95d88a1026506afbb63f2ac5092390e412e0"
+    }
+  },
+  "figure_sha256": {
+    "game_live.png": "01a75af7f80a9e7567b1a1d1dae256f3921b314fe281679cc839e09c53bdbfe2",
+    "observation_pipeline.png": "2d768649ebeaee78b73bf98961f6ddd79cce87f05b2134009d0ec9f6b63130bf",
+    "training_curves.png": "b1eb02cbe0b5c14a374feabf57eac9d65d0b3bf19c231961326d103c37568085",
+    "training_diagnostics.png": "9c2d1297bb26e057cef9b54889109f793aed5b2e1f23020f82187d1303eba6ef",
+    "score_distribution.png": "ae0f8f1e26410989742832ba1db208115564bea54a9199c4161770b3a10614c0",
+    "score_robustness.png": "e9df02e9ab3187b6d40418b01ad79335e07149e7522ce86e75ae756698b983a3",
+    "behavior_sequence.png": "1224b917e1307040629b5f71b379fbbe8ad60e0f5e5eb19327b96afc6c48712d"
+  },
+  "paired_summary": {
+    "seed_start": 42000,
+    "episodes": 30,
+    "best_mean": 260.26666666666665,
+    "best_median": 257.0,
+    "final_mean": 122.4,
+    "final_median": 101.5,
+    "best_wins": 28,
+    "mean_paired_difference": 137.86666666666667,
+    "purpose": "development_diagnosis_not_final_test"
+  },
+  "validation": {
+    "pdf_figures": 7,
+    "docx_embedded_images": 13,
+    "all_pngs_verified": true,
+    "pdf_missing_references": false,
+    "pdf_overfull_lines": false,
+    "references_removed": true,
+    "cover_verified": true,
+    "game_figure_height_cm": 9
+  },
+  "robustness_summary": {
+    "episodes": 30,
+    "statistics": [
+      {
+        "model": "最佳模型",
+        "mean": 260.26666666666665,
+        "std": 103.74710705471368,
+        "median": 257.0,
+        "p10": 111.9,
+        "p25": 210.0,
+        "below_50": 1,
+        "below_50_fraction": 0.03333333333333333,
+        "min": 36.0,
+        "max": 444.0,
+        "timeout_count": 0,
+        "full_clear_count": 0,
+        "mean_episode_length": 1943.6666666666667
+      },
+      {
+        "model": "续训最终模型",
+        "mean": 122.4,
+        "std": 90.62582413418373,
+        "median": 101.5,
+        "p10": 19.9,
+        "p25": 36.75,
+        "below_50": 9,
+        "below_50_fraction": 0.3,
+        "min": 3.0,
+        "max": 345.0,
+        "timeout_count": 0,
+        "full_clear_count": 0,
+        "mean_episode_length": 1202.5
+      }
+    ],
+    "bootstrap_seed": 20261017,
+    "bootstrap_repetitions": 20000,
+    "bootstrap_unit": "paired_episode_seed",
+    "mean_paired_difference": 137.86666666666667,
+    "paired_bootstrap_95pct_ci": [
+      95.76666666666667,
+      177.43416666666658
+    ],
+    "best_wins": 28,
+    "losing_seeds": [
+      {
+        "seed": 42001,
+        "difference": -198.0
+      },
+      {
+        "seed": 42013,
+        "difference": -9.0
+      }
+    ],
+    "purpose": "conditional_development_diagnosis_not_final_test"
+  },
+  "figure_style": {
+    "footer_notes": false,
+    "title_font": "NotoSansCJK-Bold.ttc",
+    "main_title_pt": 16,
+    "panel_title_pt": 11,
+    "data_figure_width_px": 2400,
+    "dashboard_footer_hidden": true
+  }
+}

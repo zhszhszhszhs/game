@@ -1,0 +1,88 @@
+[
+  {
+    "run": "dqn_custom_fixed_angle_500k",
+    "training_episodes": 2836,
+    "evaluation_steps": [
+      50000,
+      100000,
+      150000,
+      200000,
+      250000,
+      300000,
+      350000,
+      400000,
+      450000,
+      500000
+    ],
+    "evaluation_means": [
+      0.65,
+      0.55,
+      0.5,
+      0.5,
+      13.55,
+      173.55,
+      174.0,
+      70.2,
+      68.1,
+      133.3
+    ]
+  },
+  {
+    "run": "dqn_custom_fixed_angle_refine_200k",
+    "training_episodes": 157,
+    "evaluation_steps": [
+      0,
+      25000,
+      50000,
+      75000,
+      100000,
+      125000,
+      150000,
+      175000,
+      200000
+    ],
+    "evaluation_means": [
+      197.9,
+      283.48,
+      222.98,
+      170.82,
+      104.06,
+      189.38,
+      117.84,
+      115.34,
+      113.12
+    ]
+  },
+  {
+    "run": "dqn_custom_fixed_angle_recovery_100k",
+    "training_episodes": 38,
+    "evaluation_steps": [
+      0,
+      30000,
+      40000,
+      50000
+    ],
+    "evaluation_means": [
+      283.48,
+      167.7,
+      176.94,
+      187.78
+    ]
+  },
+  {
+    "run": "dqn_custom_fixed_angle_retention_100k",
+    "training_episodes": 31,
+    "evaluation_steps": [
+      0,
+      30000,
+      40000,
+      50000
+    ],
+    "evaluation_means": [
+      283.48,
+      250.52,
+      230.54,
+      216.94
+    ]
+  }
+]
