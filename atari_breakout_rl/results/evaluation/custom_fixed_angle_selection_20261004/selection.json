@@ -1,0 +1,51 @@
+{
+  "purpose": "development_model_selection_not_final_test",
+  "seed_start": 40000,
+  "episodes": 50,
+  "criterion": "mean_reward_then_median_reward",
+  "selected_model": "/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_350000_steps.zip",
+  "candidates": [
+    {
+      "candidate": "300k",
+      "model": "/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_300000_steps.zip",
+      "episodes": 50,
+      "mean_reward": 150.82,
+      "std_reward": 109.13582180017704,
+      "median_reward": 113.5,
+      "max_reward": 428.0,
+      "min_reward": 23.0,
+      "mean_episode_length": 1409.64,
+      "p25_reward": 69.5,
+      "fraction_below_50": 0.12,
+      "timeout_count": 0
+    },
+    {
+      "candidate": "350k",
+      "model": "/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_350000_steps.zip",
+      "episodes": 50,
+      "mean_reward": 237.68,
+      "std_reward": 104.83137698227569,
+      "median_reward": 253.5,
+      "max_reward": 436.0,
+      "min_reward": 29.0,
+      "mean_episode_length": 1859.56,
+      "p25_reward": 147.75,
+      "fraction_below_50": 0.02,
+      "timeout_count": 0
+    },
+    {
+      "candidate": "500k",
+      "model": "/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_500000_steps.zip",
+      "episodes": 50,
+      "mean_reward": 121.02,
+      "std_reward": 88.74153255381609,
+      "median_reward": 111.5,
+      "max_reward": 292.0,
+      "min_reward": 8.0,
+      "mean_episode_length": 1151.18,
+      "p25_reward": 36.5,
+      "fraction_below_50": 0.3,
+      "timeout_count": 0
+    }
+  ]
+}

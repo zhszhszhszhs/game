@@ -1,0 +1,14 @@
+{
+  "episodes": 30,
+  "seed_start": 42000,
+  "best_mean": 260.26666666666665,
+  "final_mean": 122.4,
+  "mean_paired_difference": 137.86666666666667,
+  "paired_bootstrap_95pct_ci": [
+    97.46666666666667,
+    176.4
+  ],
+  "best_wins": 28,
+  "movement_disagreement": 0.46336206896551724,
+  "purpose": "development_diagnosis_not_final_test"
+}

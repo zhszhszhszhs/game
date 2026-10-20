@@ -5,5 +5,6 @@
 - [最终版 PPT](output/Breakout_DQN_精修扩充版_v4_视觉增强定稿.pptx)
 - [逐页讲稿](output/逐页讲稿_视觉增强版.md)
 - [页面预览](output/视觉增强版预览.jpg)
+- [PPT 实验数据说明](DATA_GUIDE.md)：原始数据、图表来源、评估口径与重绘方法。
 
 图片已嵌入 PPT，打开和播放无需额外素材文件。

@@ -1,0 +1,76 @@
+{
+  "best": {
+    "episodes": 8,
+    "scores": [
+      286.0,
+      186.0,
+      225.0,
+      322.0,
+      399.0,
+      128.0,
+      334.0,
+      227.0
+    ],
+    "sampled_states": 925,
+    "q_mean": 1.8984192024050532,
+    "discounted_realized_return_mean": 14.093419989115421,
+    "q_minus_return_mean": -12.195000786710368,
+    "absolute_q_return_error_mean": 12.272924805582234,
+    "q_quantiles": [
+      0.5204793810844421,
+      1.2215080261230469,
+      1.4484286308288574,
+      2.0113275051116943,
+      9.41169261932373
+    ],
+    "reference_states": {
+      "action_fractions": [
+        59,
+        101,
+        161,
+        143
+      ],
+      "median_action_gap": 0.03880190849304199,
+      "online_target_absolute_difference": 0.14109311997890472
+    }
+  },
+  "final": {
+    "episodes": 8,
+    "scores": [
+      4.0,
+      6.0,
+      22.0,
+      130.0,
+      91.0,
+      24.0,
+      189.0,
+      32.0
+    ],
+    "sampled_states": 417,
+    "q_mean": 2.7806260052630654,
+    "discounted_realized_return_mean": 7.200741912390109,
+    "q_minus_return_mean": -4.420115907127044,
+    "absolute_q_return_error_mean": 4.673835822082445,
+    "q_quantiles": [
+      0.8924151659011841,
+      1.6182353496551514,
+      2.220369815826416,
+      3.203517436981201,
+      15.373089790344238
+    ],
+    "reference_states": {
+      "action_fractions": [
+        79,
+        105,
+        124,
+        156
+      ],
+      "median_action_gap": 0.09010517597198486,
+      "online_target_absolute_difference": 0.11778581887483597
+    }
+  },
+  "reference_action_disagreement": 0.5474137931034483,
+  "note": "Eight independent full games per model on seeds 43000..43007; sampled states are correlated. Q minus realized discounted return is a diagnostic, not proof of maximization bias.",
+  "reference_movement_disagreement": 0.46336206896551724,
+  "reference_samples": 464
+}

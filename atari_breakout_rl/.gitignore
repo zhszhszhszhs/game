@@ -4,4 +4,49 @@ __pycache__/
 logs/*
 models/*
 results/*
+
+# PPT/report source data: the four current-physics training stages.
+# Keep TensorBoard events, console logs and runtime state local.
+!logs/dqn_custom_fixed_angle_500k/
+!logs/dqn_custom_fixed_angle_refine_200k/
+!logs/dqn_custom_fixed_angle_recovery_100k/
+!logs/dqn_custom_fixed_angle_retention_100k/
+logs/dqn_custom_fixed_angle_*/*
+!logs/dqn_custom_fixed_angle_*/config.json
+!logs/dqn_custom_fixed_angle_*/training_summary.json
+!logs/dqn_custom_fixed_angle_*/train.monitor.csv
+!logs/dqn_custom_fixed_angle_*/progress.csv
+!logs/dqn_custom_fixed_angle_*/eval/
+logs/dqn_custom_fixed_angle_*/eval/*
+!logs/dqn_custom_fixed_angle_*/eval/eval.monitor.csv
+!logs/dqn_custom_fixed_angle_*/eval/evaluations.npz
+
+# Best-checkpoint provenance only; model weights and replay buffers stay local.
+!models/dqn_custom_fixed_angle_500k/
+!models/dqn_custom_fixed_angle_refine_200k/
+!models/dqn_custom_fixed_angle_recovery_100k/
+!models/dqn_custom_fixed_angle_retention_100k/
+models/dqn_custom_fixed_angle_*/*
+!models/dqn_custom_fixed_angle_*/best_model/
+models/dqn_custom_fixed_angle_*/best_model/*
+!models/dqn_custom_fixed_angle_*/best_model/selection.json
+
+# Supplemental software/hardware snapshot; per-run config.json is authoritative.
+!results/environment.json
+
+# Current-physics baseline, checkpoint selection and paired development scores.
+# These are development evaluations, not a final held-out test.
+!results/evaluation/
+results/evaluation/**/*
+!results/evaluation/custom_fixed_angle_random_development/
+!results/evaluation/custom_fixed_angle_selection_20261004/
+!results/evaluation/custom_fixed_angle_selection_20261004/**/
+!results/evaluation/regression_audit/
+!results/evaluation/regression_audit/**/
+!results/evaluation/report_best_30/
+!results/evaluation/report_final_30/
+!results/evaluation/*/**/*.csv
+!results/evaluation/*/**/*.json
+!results/evaluation/regression_audit/reference_states.npz
+
 !.gitkeep

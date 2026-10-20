@@ -1,0 +1,4 @@
+candidate,model,episodes,mean_reward,std_reward,median_reward,max_reward,min_reward,mean_episode_length,p25_reward,fraction_below_50,timeout_count
+300k,/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_300000_steps.zip,50,150.82,109.13582180017704,113.5,428.0,23.0,1409.64,69.5,0.12,0
+350k,/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_350000_steps.zip,50,237.68,104.83137698227569,253.5,436.0,29.0,1859.56,147.75,0.02,0
+500k,/data/zhs/game/atari_breakout_rl/models/dqn_custom_fixed_angle_500k/checkpoints/dqn_breakout_500000_steps.zip,50,121.02,88.74153255381609,111.5,292.0,8.0,1151.18,36.5,0.3,0
