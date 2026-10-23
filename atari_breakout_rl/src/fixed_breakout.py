@@ -236,13 +236,18 @@ class RepeatAndPool(gym.Wrapper):
     """
     def step(self, action):
         frames, total, auto_fire, lost = [], 0.0, False, False
+        paddle_contacts, lives_lost = 0, 0
         for _ in range(4):
+            previous_hits, previous_lives = self.unwrapped.paddle_hits, self.unwrapped.lives
             obs, reward, terminated, truncated, info = self.env.step(action)
+            paddle_contacts += max(0, info['paddle_hits'] - previous_hits)
+            lives_lost += max(0, previous_lives - info['lives'])
             frames = (frames + [obs])[-2:]
             total += reward
             auto_fire |= info.get('auto_fire', False)
             lost |= info.get('life_lost', False)
             if terminated or truncated:
                 break
-        info = dict(info, auto_fire=auto_fire, life_lost=lost)
+        info = dict(info, auto_fire=auto_fire, life_lost=lost,
+                    paddle_contacts=paddle_contacts, lives_lost=lives_lost)
         return np.maximum(frames[0], frames[-1]), total, terminated, truncated, info

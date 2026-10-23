@@ -1,0 +1,183 @@
+{
+  "training": {
+    "control": {
+      "algorithm": "ppo",
+      "status": "completed",
+      "target_timesteps": 200000,
+      "timesteps": 200704,
+      "stage_timesteps": 200704,
+      "source_timesteps": 400000,
+      "optimizer_reset": false,
+      "separate_critic": false,
+      "optimization_epochs": 2342,
+      "stage_optimization_epochs": 782,
+      "elapsed_seconds": 588.5233401693404,
+      "evaluation_seconds": 135.02134077996016,
+      "device": "cuda:3",
+      "environment": {
+        "env_id": "FixedSpeedBreakout-v0",
+        "physics_version": 3,
+        "ball_speed": 2.0,
+        "physics_fps": 60,
+        "wrapper_frame_skip": 4,
+        "frame_stack": 4,
+        "screen_size": 84,
+        "repeat_action_probability": 0.0,
+        "auto_fire_on_life_loss": true,
+        "fire_on_reset": true,
+        "terminal_on_life_loss": false,
+        "clip_reward": false,
+        "max_num_frames_per_episode": 108000,
+        "paddle_width": 16.0,
+        "shrink_paddle_on_ceiling": false,
+        "hit_count_affects_angle": false
+      },
+      "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_control_200k_20261022/final_model.zip",
+      "best_eval_reward": 60.0
+    },
+    "refine": {
+      "algorithm": "ppo",
+      "status": "completed",
+      "target_timesteps": 200000,
+      "timesteps": 200704,
+      "stage_timesteps": 200704,
+      "source_timesteps": 400000,
+      "optimizer_reset": true,
+      "separate_critic": true,
+      "optimization_epochs": 1756,
+      "stage_optimization_epochs": 196,
+      "elapsed_seconds": 598.4685163386166,
+      "evaluation_seconds": 136.23490434512496,
+      "device": "cuda:1",
+      "environment": {
+        "env_id": "FixedSpeedBreakout-v0",
+        "physics_version": 3,
+        "ball_speed": 2.0,
+        "physics_fps": 60,
+        "wrapper_frame_skip": 4,
+        "frame_stack": 4,
+        "screen_size": 84,
+        "repeat_action_probability": 0.0,
+        "auto_fire_on_life_loss": true,
+        "fire_on_reset": true,
+        "terminal_on_life_loss": false,
+        "clip_reward": false,
+        "max_num_frames_per_episode": 108000,
+        "paddle_width": 16.0,
+        "shrink_paddle_on_ceiling": false,
+        "hit_count_affects_angle": false
+      },
+      "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_refine_200k_20261022/final_model.zip",
+      "best_eval_reward": 71.7
+    }
+  },
+  "selected_checkpoints": {
+    "control": {
+      "criterion": "mean_reward",
+      "timesteps": 150000,
+      "mean_reward": 60.0,
+      "median_reward": 32.0,
+      "std_reward": 83.69826760453289,
+      "episodes": 10,
+      "eval_seed": 31000,
+      "replay_buffer_path": null,
+      "replay_size": null
+    },
+    "refine": {
+      "criterion": "mean_reward",
+      "timesteps": 100000,
+      "mean_reward": 71.7,
+      "median_reward": 42.5,
+      "std_reward": 64.35223383846127,
+      "episodes": 10,
+      "eval_seed": 31000,
+      "replay_buffer_path": null,
+      "replay_size": null
+    }
+  },
+  "scores": [
+    {
+      "method": "baseline",
+      "split": "paired",
+      "episodes": 20,
+      "mean": 35.0,
+      "median": 25.5,
+      "std": 24.298148077579903,
+      "min": 8.0,
+      "max": 86.0
+    },
+    {
+      "method": "control",
+      "split": "paired",
+      "episodes": 20,
+      "mean": 52.45,
+      "median": 31.5,
+      "std": 37.22831583620188,
+      "min": 18.0,
+      "max": 138.0
+    },
+    {
+      "method": "refine",
+      "split": "paired",
+      "episodes": 20,
+      "mean": 56.15,
+      "median": 43.5,
+      "std": 50.41455642966623,
+      "min": 7.0,
+      "max": 224.0
+    },
+    {
+      "method": "baseline",
+      "split": "heldout",
+      "episodes": 30,
+      "mean": 34.0,
+      "median": 27.0,
+      "std": 23.32237838071695,
+      "min": 8.0,
+      "max": 102.0
+    },
+    {
+      "method": "control",
+      "split": "heldout",
+      "episodes": 30,
+      "mean": 53.0,
+      "median": 33.5,
+      "std": 67.41958172519315,
+      "min": 4.0,
+      "max": 384.0
+    },
+    {
+      "method": "refine",
+      "split": "heldout",
+      "episodes": 30,
+      "mean": 43.333333333333336,
+      "median": 26.0,
+      "std": 61.73509716702665,
+      "min": 8.0,
+      "max": 356.0
+    }
+  ],
+  "paired_heldout_effects": {
+    "baseline": {
+      "mean_difference": 9.333333333333334,
+      "paired_bootstrap_ci95": [
+        -10.033333333333333,
+        37.53333333333333
+      ],
+      "wins": 13,
+      "ties": 2,
+      "losses": 15
+    },
+    "control": {
+      "mean_difference": -9.666666666666666,
+      "paired_bootstrap_ci95": [
+        -42.63333333333333,
+        20.866666666666667
+      ],
+      "wins": 15,
+      "ties": 1,
+      "losses": 14
+    }
+  },
+  "note": "Game-seed bootstrap is conditional on these trained policies, not uncertainty across training seeds."
+}

@@ -1,0 +1,7 @@
+key,label,note,mean,ci_low,ci_high,episodes,training_repeats,interval,interval_source,wins,ties,losses
+tricks,稳定续训组合 − 仅续训,30 局，单次训练,-9.666666666666666,-42.63333333333333,20.866666666666667,30,1,paired_episode_bootstrap,results/evaluation/ppo_optimization_20261022/summary.json,15,1,14
+shaping,辅助奖励 − 原始奖励,50 局，单次训练,-31.2,-62.56,-1.8190000000000874,50,1,paired_episode_bootstrap,new_paired_bootstrap,22,0,28
+balanced,独立裁剪+Huber − 标准更新,50 局，单次训练,18.92,-13.52,52.16,50,1,paired_episode_bootstrap,results/evaluation/ppo_balanced_20261022/comparison_summary.json,30,0,20
+dual_rate,双学习率+额外拟合 − 对照,50 局，单次训练，含早停,-5.88,-49.06,36.60049999999996,50,1,paired_episode_bootstrap,results/evaluation/ppo_dual_rate_20261022/comparison_summary.json,27,0,23
+gae,GAE 0.99 − 0.98,50 局，单次训练,6.88,-41.0805,54.68049999999996,50,1,paired_episode_bootstrap,report/data/ppo_report_summary.json,25,0,25
+adaptive_kl,KL 反馈 − 固定计划,每次 50 局，三次配对续训,7.8133333333333335,-47.2935,64.16816666666654,50,3,paired_two_way_bootstrap,new_paired_bootstrap,77,2,71

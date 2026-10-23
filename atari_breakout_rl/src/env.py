@@ -61,24 +61,39 @@ class FrameObserver(gym.Wrapper):
 
 
 def make_env(seed=42, monitor_path=None, render_mode=None,
-             auto_fire_on_life_loss=True, frame_callback=None):
+             auto_fire_on_life_loss=True, frame_callback=None, n_envs=1,
+             paddle_hit_bonus=0.0, life_loss_penalty=0.0, fixed_episode_seeds=False):
     from fixed_breakout import AutoFire, RepeatAndPool
 
-    def factory():
+    if n_envs < 1:
+        raise ValueError('n_envs must be positive')
+    if frame_callback is not None and n_envs != 1:
+        raise ValueError('Frame playback requires a single environment')
+
+    def factory(rank):
         env = raw_env(render_mode)
         if auto_fire_on_life_loss:
             env = AutoFire(env)
         if frame_callback is not None:
             env = FrameObserver(env, frame_callback)
         env = WarpFrame(RepeatAndPool(env), width=84, height=84)
+        if fixed_episode_seeds:
+            from episode_seeds import EpisodeSeeds
+            env = EpisodeSeeds(env, stride=n_envs)
         # Complete games, native reward. Do not turn each lost life into an episode.
-        if monitor_path:
-            Path(monitor_path).parent.mkdir(parents=True, exist_ok=True)
-        env = Monitor(env, filename=str(monitor_path) if monitor_path else None,
-                      info_keywords=('lives',))
-        env.action_space.seed(seed)
+        path = Path(monitor_path) if monitor_path else None
+        if path:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            if n_envs > 1:
+                path = path.with_name(f'{path.stem}.{rank}.monitor.csv')
+        env = Monitor(env, filename=str(path) if path else None,
+                      info_keywords=('lives', 'episode_seed') if fixed_episode_seeds else ('lives',))
+        if paddle_hit_bonus or life_loss_penalty:
+            from training_reward import TrainingReward
+            env = TrainingReward(env, paddle_hit_bonus, life_loss_penalty)
+        env.action_space.seed(seed + rank)
         return env
-    vec = DummyVecEnv([factory])
+    vec = DummyVecEnv([lambda rank=rank: factory(rank) for rank in range(n_envs)])
     vec.seed(seed)
     vec = VecFrameStack(vec, n_stack=4, channels_order="last")
     return VecTransposeImage(vec)  # uint8 (N, 4, 84, 84); CnnPolicy divides by 255.

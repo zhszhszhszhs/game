@@ -1,0 +1,115 @@
+{
+  "protocol": {
+    "seed": 101000,
+    "episodes": 32,
+    "rule": "Among candidates within 5% of maximum validation mean, choose highest median, then p25, then mean."
+  },
+  "candidates": [
+    {
+      "name": "balanced_source",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_source.zip",
+      "sha256": "2656cf1be128e20a0189f626f9b86b742407413a9f5d87795af154aae77131f1",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_balanced_500k_20261022/best_model/best_model.zip",
+      "development_selection": {
+        "criterion": "mean_reward",
+        "timesteps": 503808,
+        "mean_reward": 158.59375,
+        "median_reward": 80.5,
+        "std_reward": 138.8812125916875,
+        "episodes": 32,
+        "eval_seed": 31000,
+        "replay_buffer_path": null,
+        "replay_size": null
+      },
+      "summary": {
+        "episodes": 32,
+        "mean_reward": 93.6875,
+        "std_reward": 100.02638323837367,
+        "median_reward": 57.5,
+        "max_reward": 420.0,
+        "min_reward": 13.0,
+        "mean_episode_length": 1156.46875
+      },
+      "p25": 39.5
+    },
+    {
+      "name": "dual_rate_stable",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/dual_rate_stable.zip",
+      "sha256": "74db23c6b92a98a365e10e8b332280512337c40d3e52a2fce88d0069123bbb2b",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_500k_20261022/stable_model/best_model.zip",
+      "development_selection": {
+        "criterion": "median_reward_then_mean_reward",
+        "timesteps": 300000,
+        "median_reward": 132.5,
+        "mean_reward": 158.53125,
+        "std_reward": 127.38033216881443,
+        "episodes": 32,
+        "eval_seed": 31000
+      },
+      "summary": {
+        "episodes": 32,
+        "mean_reward": 135.78125,
+        "std_reward": 111.44385760748548,
+        "median_reward": 99.0,
+        "max_reward": 375.0,
+        "min_reward": 21.0,
+        "mean_episode_length": 2062.96875
+      },
+      "p25": 56.25
+    },
+    {
+      "name": "balanced_control",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+      "sha256": "e858cc6150f13c75ea27fe866cc735a6e9eec72563adb8b468e398f713da5229",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_control_500k_20261022/best_model/best_model.zip",
+      "development_selection": {
+        "criterion": "mean_reward",
+        "timesteps": 200000,
+        "mean_reward": 167.53125,
+        "median_reward": 103.0,
+        "std_reward": 137.4643099987684,
+        "episodes": 32,
+        "eval_seed": 31000,
+        "replay_buffer_path": null,
+        "replay_size": null
+      },
+      "summary": {
+        "episodes": 32,
+        "mean_reward": 168.65625,
+        "std_reward": 138.75329036076045,
+        "median_reward": 103.5,
+        "max_reward": 414.0,
+        "min_reward": 12.0,
+        "mean_episode_length": 1430.59375
+      },
+      "p25": 52.25
+    }
+  ],
+  "selected": {
+    "name": "balanced_control",
+    "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+    "sha256": "e858cc6150f13c75ea27fe866cc735a6e9eec72563adb8b468e398f713da5229",
+    "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_control_500k_20261022/best_model/best_model.zip",
+    "development_selection": {
+      "criterion": "mean_reward",
+      "timesteps": 200000,
+      "mean_reward": 167.53125,
+      "median_reward": 103.0,
+      "std_reward": 137.4643099987684,
+      "episodes": 32,
+      "eval_seed": 31000,
+      "replay_buffer_path": null,
+      "replay_size": null
+    },
+    "summary": {
+      "episodes": 32,
+      "mean_reward": 168.65625,
+      "std_reward": 138.75329036076045,
+      "median_reward": 103.5,
+      "max_reward": 414.0,
+      "min_reward": 12.0,
+      "mean_episode_length": 1430.59375
+    },
+    "p25": 52.25
+  }
+}

@@ -3,7 +3,8 @@ import argparse
 from pathlib import Path
 
 import imageio.v2 as imageio
-from stable_baselines3 import DQN
+from stable_baselines3.common.utils import check_for_correct_spaces
+from model_io import algorithm_name, load_model
 from env import environment_spec, make_env
 from utils import ROOT, setup, write_json
 
@@ -21,14 +22,14 @@ def main():
         p.error('episodes must be positive')
     device = setup(args.seed, args.device)
     args.output_dir.mkdir(parents=True, exist_ok=True)
-    name = args.name or ('dqn_final' if args.model else 'random_agent')
-    model = DQN.load(args.model, device=device) if args.model else None
+    model = load_model(args.model, device=device) if args.model else None
+    name = args.name or (f'{algorithm_name(model)}_final' if model else 'random_agent')
     spec = environment_spec(model)
     env = make_env(args.seed, render_mode='rgb_array')
     records = []
     try:
         if model is not None:
-            model.set_env(env)
+            check_for_correct_spaces(env, model.observation_space, model.action_space)
         for episode in range(args.episodes):
             seed = args.seed + episode
             env.seed(seed)

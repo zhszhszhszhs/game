@@ -1,0 +1,124 @@
+{
+  "status": "completed",
+  "runs": [
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48",
+      "arm": "adaptive",
+      "training_seed": 48,
+      "mean": 224.26,
+      "median": 226.5,
+      "p25": 101.25,
+      "std": 135.33924929598214,
+      "below50": 6,
+      "truncated": 2,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48/ppo_results.csv",
+      "csv_sha256": "67f7f56caffd150706a6390ff5d70cf037d76794443eb5f0e13b1b03bffdf7f5",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48/stable_model/best_model.zip",
+      "model_sha256": "c7c8e51f8394c90b3f465c638d82697a777106669cf47c8fd31195947b4c58fc"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_control_s48",
+      "arm": "control",
+      "training_seed": 48,
+      "mean": 170.66,
+      "median": 124.5,
+      "p25": 71.0,
+      "std": 123.9294331464483,
+      "below50": 8,
+      "truncated": 2,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_control_s48/ppo_results.csv",
+      "csv_sha256": "9010ecd9c1cc983b0b9c22c0d67c77c75d1c170a298c657889a6f0bd950013b7",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_control_s48/best_model/best_model.zip",
+      "model_sha256": "b00daa394f24d4f4b336bb314f8d957faa2da2bd1d5c8700055f6a8d50efcf9f"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_adaptive_s49",
+      "arm": "adaptive",
+      "training_seed": 49,
+      "mean": 181.54,
+      "median": 143.5,
+      "p25": 60.5,
+      "std": 147.31628694750626,
+      "below50": 11,
+      "truncated": 2,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s49/ppo_results.csv",
+      "csv_sha256": "85b6314cb9edb4c0b8bebc899b5a9c636fd5c3c271a60d60b4746bf48f686f5b",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s49/best_model/best_model.zip",
+      "model_sha256": "ff56b406369a952568d9fe6f5d5ecca7ee1f057be8c21f841d28c667b63485b7"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_control_s49",
+      "arm": "control",
+      "training_seed": 49,
+      "mean": 215.04,
+      "median": 184.0,
+      "p25": 64.5,
+      "std": 146.66314601835052,
+      "below50": 9,
+      "truncated": 1,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_control_s49/ppo_results.csv",
+      "csv_sha256": "bf72762e73f0b4f58537be8e5246645a1b59dc3f430755b914c703d94601ce0c",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_control_s49/best_model/best_model.zip",
+      "model_sha256": "c27f335001f4c3c4eede94cfbab8532ea8645c984ab20ed1bbd7069b37beb295"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_adaptive_s50",
+      "arm": "adaptive",
+      "training_seed": 50,
+      "mean": 213.78,
+      "median": 171.0,
+      "p25": 83.25,
+      "std": 140.17906976435532,
+      "below50": 3,
+      "truncated": 3,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s50/ppo_results.csv",
+      "csv_sha256": "6da18269dab113bfb7155c8b1fa027c65a7aaaaefbc9dca3f6f0429d50cfb01e",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s50/best_model/best_model.zip",
+      "model_sha256": "b52753b66948338d51ec79ce23e3159701d36295775be6b146e19391aaac9bb6"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_control_s50",
+      "arm": "control",
+      "training_seed": 50,
+      "mean": 210.44,
+      "median": 192.0,
+      "p25": 94.5,
+      "std": 140.70169295356757,
+      "below50": 9,
+      "truncated": 2,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_control_s50/ppo_results.csv",
+      "csv_sha256": "2c24b9d20c5fbc32c3fd7bd5cd8eb607533f55ab043b13702e86d1a6177ffd7f",
+      "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_control_s50/best_model/best_model.zip",
+      "model_sha256": "6dddf369f9ec76833fc87549309a13c72627816160ec03c4036b0a76d40d9377"
+    },
+    {
+      "run": "ppo_custom_fixed_angle_kl_study_20261022_source_test",
+      "arm": "source",
+      "training_seed": null,
+      "mean": 194.36,
+      "median": 134.5,
+      "p25": 87.0,
+      "std": 135.2814488390777,
+      "below50": 5,
+      "truncated": 1,
+      "csv": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/source_heldout/ppo_results.csv",
+      "csv_sha256": "a2cf487ddc61eace7e18a6d01d7b09974ea577ab523ebf00ec1d7d81e213f8f9"
+    }
+  ],
+  "paired_adaptive_minus_control": {
+    "mean_difference": 7.8133333333333335,
+    "per_training_seed_mean_difference": [
+      53.6,
+      -33.5,
+      3.34
+    ],
+    "ci95": [
+      -47.2935,
+      64.16816666666654
+    ],
+    "training_seeds_won": 2,
+    "caveat": "Only three continuation seeds: interval is exploratory and conditional on frozen source."
+  },
+  "scope": "Three continuation seeds conditional on one frozen initialization; not from-scratch replication.",
+  "smoke": false
+}

@@ -1,0 +1,156 @@
+{
+  "source_candidates": [
+    {
+      "name": "balanced_source",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_source.zip",
+      "sha256": "2656cf1be128e20a0189f626f9b86b742407413a9f5d87795af154aae77131f1",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_balanced_500k_20261022/best_model/best_model.zip",
+      "development_selection": {
+        "criterion": "mean_reward",
+        "timesteps": 503808,
+        "mean_reward": 158.59375,
+        "median_reward": 80.5,
+        "std_reward": 138.8812125916875,
+        "episodes": 32,
+        "eval_seed": 31000,
+        "replay_buffer_path": null,
+        "replay_size": null
+      }
+    },
+    {
+      "name": "dual_rate_stable",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/dual_rate_stable.zip",
+      "sha256": "74db23c6b92a98a365e10e8b332280512337c40d3e52a2fce88d0069123bbb2b",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_500k_20261022/stable_model/best_model.zip",
+      "development_selection": {
+        "criterion": "median_reward_then_mean_reward",
+        "timesteps": 300000,
+        "median_reward": 132.5,
+        "mean_reward": 158.53125,
+        "std_reward": 127.38033216881443,
+        "episodes": 32,
+        "eval_seed": 31000
+      }
+    },
+    {
+      "name": "balanced_control",
+      "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+      "sha256": "e858cc6150f13c75ea27fe866cc735a6e9eec72563adb8b468e398f713da5229",
+      "original": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_control_500k_20261022/best_model/best_model.zip",
+      "development_selection": {
+        "criterion": "mean_reward",
+        "timesteps": 200000,
+        "mean_reward": 167.53125,
+        "median_reward": 103.0,
+        "std_reward": 137.4643099987684,
+        "episodes": 32,
+        "eval_seed": 31000,
+        "replay_buffer_path": null,
+        "replay_size": null
+      }
+    }
+  ],
+  "source_validation": {
+    "seed": 101000,
+    "episodes": 32,
+    "rule": "Among candidates within 5% of maximum validation mean, choose highest median, then p25, then mean."
+  },
+  "development": {
+    "seed": 111000,
+    "episodes": 32,
+    "n_envs": 8,
+    "per_episode_seeds": true
+  },
+  "test": {
+    "seed": 121000,
+    "episodes": 50,
+    "n_envs": 1,
+    "selection_use": false
+  },
+  "arms": {
+    "baseline": {
+      "gae_lambda": 0.98
+    },
+    "gae": {
+      "gae_lambda": 0.99
+    }
+  },
+  "training_seed": 47,
+  "requested_steps_per_arm": 500000,
+  "selection": {
+    "mode": "stable_near_mean",
+    "mean_tolerance": 0.05
+  },
+  "note": "Rules and candidate snapshots frozen before source validation scores; all source candidates are immutable snapshots.",
+  "configuration": "/data/zhs/game/atari_breakout_rl/configs/ppo_custom_gae.yaml",
+  "configuration_sha256": "0328c8bda2ce065042ffc10c1c50b9d3420dbda79c6cb43b925348c3d45c364e",
+  "verification": {
+    "unit_tests_passed": 42,
+    "full_test_log": "/tmp/ppo_gae_full_tests.log",
+    "pipeline_smoke": "/tmp/ppo_gae_smoke/logs/ppo_gae_pipeline_smoke/training_summary.json"
+  },
+  "implementation_sha256": {
+    "src/episode_seeds.py": "a6e9b48567553a494caf68f615dd3002d6450b2d5af7e36dcf37db34995dfa8c",
+    "src/checkpoint_selection.py": "4dd5bf39bfd9056e224ed4dc73619484a865ac7f4cd5a6e9b1473100ff5a1892",
+    "src/callbacks.py": "aa3379db7887ffb3b709740d2bc063283b7bb35851f52672b0b2375e80c897c6",
+    "src/balanced_ppo.py": "93540b4552852fec89996616de83689ad54e6fb0f68321861253188b50a95838",
+    "src/train_ppo.py": "7e7587e74bb649d4e5f0ef355dd8d5ce33f3e8ec222cd02905ed7f512879109e"
+  },
+  "selected_source": {
+    "name": "balanced_control",
+    "path": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+    "sha256": "e858cc6150f13c75ea27fe866cc735a6e9eec72563adb8b468e398f713da5229"
+  },
+  "run_names": {
+    "gae": "ppo_custom_fixed_angle_gae_500k_20261022",
+    "control": "ppo_custom_fixed_angle_gae_control_500k_20261022"
+  },
+  "launches": {
+    "gae": {
+      "pid": 333740,
+      "command": [
+        "/data/zhs/game/.venv/bin/python",
+        "-u",
+        "/data/zhs/game/atari_breakout_rl/src/train_ppo.py",
+        "--run-name",
+        "ppo_custom_fixed_angle_gae_500k_20261022",
+        "--log-dir",
+        "/data/zhs/game/atari_breakout_rl/logs",
+        "--config",
+        "/data/zhs/game/atari_breakout_rl/configs/ppo_custom_gae.yaml",
+        "--resume",
+        "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+        "--device",
+        "cuda:1",
+        "--evaluation-dir",
+        "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_gae_20261022"
+      ],
+      "started_at": "2026-10-22T08:01:07.754273+00:00",
+      "console": "/data/zhs/game/atari_breakout_rl/logs/ppo_custom_fixed_angle_gae_500k_20261022.console.log"
+    },
+    "control": {
+      "pid": 333932,
+      "command": [
+        "/data/zhs/game/.venv/bin/python",
+        "-u",
+        "/data/zhs/game/atari_breakout_rl/src/train_ppo.py",
+        "--run-name",
+        "ppo_custom_fixed_angle_gae_control_500k_20261022",
+        "--log-dir",
+        "/data/zhs/game/atari_breakout_rl/logs",
+        "--config",
+        "/data/zhs/game/atari_breakout_rl/configs/ppo_custom_gae.yaml",
+        "--resume",
+        "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip",
+        "--device",
+        "cuda:3",
+        "--gae-lambda",
+        "0.98",
+        "--evaluation-dir",
+        "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_gae_20261022"
+      ],
+      "started_at": "2026-10-22T08:01:09.247793+00:00",
+      "console": "/data/zhs/game/atari_breakout_rl/logs/ppo_custom_fixed_angle_gae_control_500k_20261022.console.log"
+    }
+  }
+}

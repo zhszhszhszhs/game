@@ -3,20 +3,21 @@ import argparse
 import json
 from pathlib import Path
 
-from stable_baselines3 import DQN
+from stable_baselines3.common.utils import check_for_correct_spaces
+from model_io import algorithm_name, load_model
 from env import environment_spec, make_env
 from utils import ROOT, setup, summary, versions, write_csv, write_json
 
 
-def run_episodes(model=None, episodes=50, seed=10000, output=None):
+def run_episodes(model=None, episodes=50, seed=10000, output=None, on_episode=None):
     if episodes < 1:
         raise ValueError('episodes must be positive')
     spec = environment_spec(model)
     env = make_env(seed)
-    if model is not None:
-        model.set_env(env)  # Validate the shared image/action spaces on load.
     rows = []
     try:
+        if model is not None:
+            check_for_correct_spaces(env, model.observation_space, model.action_space)
         for episode in range(episodes):
             episode_seed = seed + episode
             # Reset both game RNG and action RNG for independently reproducible episodes.
@@ -36,6 +37,8 @@ def run_episodes(model=None, episodes=50, seed=10000, output=None):
                                      truncated=bool(infos[0].get('TimeLimit.truncated', False)),
                                      remaining_lives=infos[0].get('lives')))
                     print(f"Episode {episode+1}/{episodes}: reward={reward_sum:g}, length={length}", flush=True)
+                    if on_episode is not None:
+                        on_episode(rows[-1], len(rows))
                     break
     finally:
         env.close()
@@ -61,16 +64,18 @@ def main():
     if args.threads < 1:
         p.error('--threads must be positive')
     device = setup(args.seed, args.device, args.threads)
-    model = DQN.load(args.model, device=device)
-    dqn = run_episodes(model, args.episodes, args.seed, args.output_dir / 'dqn_results.csv')
-    meta_path = args.output_dir / 'dqn_results.json'
+    model = load_model(args.model, device=device)
+    algorithm = algorithm_name(model)
+    trained = run_episodes(model, args.episodes, args.seed, args.output_dir / f'{algorithm}_results.csv')
+    meta_path = args.output_dir / f'{algorithm}_results.json'
     meta = json.loads(meta_path.read_text())
-    meta.update(model=str(args.model.resolve()), training_timesteps=model.num_timesteps,
-                training_environment=environment_spec(model))
+    meta.update(algorithm=algorithm, model=str(args.model.resolve()), training_timesteps=model.num_timesteps,
+                training_environment=environment_spec(model),
+                training_reward=getattr(model, 'breakout_training_reward', None))
     write_json(meta_path, meta)
     if args.compare_random:
         random = run_episodes(None, args.episodes, args.seed, args.output_dir / 'random_results.csv')
-        comparison = [dict(agent=name, **summary(rows)) for name, rows in [('Random', random), ('DQN', dqn)]]
+        comparison = [dict(agent=name, **summary(rows)) for name, rows in [('Random', random), (algorithm.upper(), trained)]]
         write_csv(args.output_dir / 'comparison.csv', comparison)
         print('\nAgent    Average reward    Maximum reward    Mean episode length')
         for row in comparison:

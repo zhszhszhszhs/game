@@ -1,0 +1,82 @@
+{
+  "summary": {
+    "episodes": 50,
+    "mean_reward": 196.54,
+    "std_reward": 138.90964113408398,
+    "median_reward": 166.5,
+    "max_reward": 436.0,
+    "min_reward": 13.0,
+    "mean_episode_length": 4173.86
+  },
+  "environment": {
+    "env_id": "FixedSpeedBreakout-v0",
+    "physics_version": 3,
+    "ball_speed": 2.0,
+    "physics_fps": 60,
+    "wrapper_frame_skip": 4,
+    "frame_stack": 4,
+    "screen_size": 84,
+    "repeat_action_probability": 0.0,
+    "auto_fire_on_life_loss": true,
+    "fire_on_reset": true,
+    "terminal_on_life_loss": false,
+    "clip_reward": false,
+    "max_num_frames_per_episode": 108000,
+    "paddle_width": 16.0,
+    "shrink_paddle_on_ceiling": false,
+    "hit_count_affects_angle": false
+  },
+  "seed": 121000,
+  "deterministic": true,
+  "versions": {
+    "python": "3.11.16",
+    "packages": {
+      "torch": "2.14.0+cu126",
+      "gymnasium": "1.3.0",
+      "stable-baselines3": "2.9.0",
+      "numpy": "2.4.6",
+      "matplotlib": "3.11.2",
+      "tensorboard": "2.21.0"
+    },
+    "cuda_available": true,
+    "cuda_device": "NVIDIA GeForce RTX 4090"
+  },
+  "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_control_500k_20261022/best_model/best_model.zip",
+  "training_timesteps": 500000,
+  "ppo_variant": "balanced",
+  "device": "cpu",
+  "checkpoint_selection": {
+    "criterion": "stable_near_mean",
+    "mean_tolerance": 0.05,
+    "minimum_mean_reward": 186.2,
+    "mean_best": {
+      "criterion": "mean_reward",
+      "timesteps": 500000,
+      "mean_reward": 196.0,
+      "median_reward": 136.0,
+      "std_reward": 144.3301337212711,
+      "episodes": 32,
+      "eval_seed": 111000,
+      "evaluation_protocol": "fixed_episode_seeds",
+      "replay_buffer_path": null,
+      "replay_size": null
+    },
+    "median_best": {
+      "criterion": "median_reward_then_mean_reward",
+      "timesteps": 300000,
+      "median_reward": 141.5,
+      "mean_reward": 180.21875,
+      "std_reward": 132.75017287535823,
+      "episodes": 32,
+      "eval_seed": 111000,
+      "evaluation_protocol": "fixed_episode_seeds"
+    },
+    "selected_kind": "best_model"
+  },
+  "training_reward": {
+    "paddle_hit_bonus": 0.0,
+    "life_loss_penalty": 0.0,
+    "monitor_reward": "native",
+    "evaluation_reward": "native"
+  }
+}

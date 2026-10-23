@@ -1,29 +1,57 @@
-\contentsline {section}{\numberline {1}DQN 算法原理}{1}{section.1}%
-\contentsline {subsection}{\numberline {1.1}强化学习任务与长期回报}{1}{subsection.1.1}%
-\contentsline {subsection}{\numberline {1.2}Q-learning 与神经网络近似}{1}{subsection.1.2}%
-\contentsline {subsection}{\numberline {1.3}经验回放与目标网络}{2}{subsection.1.3}%
-\contentsline {subsection}{\numberline {1.4}探索机制与多步回报}{2}{subsection.1.4}%
-\contentsline {section}{\numberline {2}游戏环境建模}{3}{section.2}%
-\contentsline {subsection}{\numberline {2.1}游戏规则与物理过程}{3}{subsection.2.1}%
-\contentsline {subsection}{\numberline {2.2}状态、动作与奖励定义}{3}{subsection.2.2}%
-\contentsline {subsection}{\numberline {2.3}图像预处理与时序信息}{4}{subsection.2.3}%
-\contentsline {subsection}{\numberline {2.4}回合终止、时间截断与环境一致性}{5}{subsection.2.4}%
-\contentsline {section}{\numberline {3}模型实现}{6}{section.3}%
-\contentsline {subsection}{\numberline {3.1}整体程序结构}{6}{subsection.3.1}%
-\contentsline {subsection}{\numberline {3.2}卷积价值网络}{6}{subsection.3.2}%
-\contentsline {subsection}{\numberline {3.3}训练循环与模型更新}{7}{subsection.3.3}%
-\contentsline {subsection}{\numberline {3.4}续训、状态保存与实时推理}{7}{subsection.3.4}%
-\contentsline {section}{\numberline {4}训练过程}{8}{section.4}%
-\contentsline {subsection}{\numberline {4.1}基础训练设置}{8}{subsection.4.1}%
-\contentsline {subsection}{\numberline {4.2}低学习率续训与策略保护}{8}{subsection.4.2}%
-\contentsline {subsection}{\numberline {4.3}后续恢复实验与评估协议}{9}{subsection.4.3}%
-\contentsline {subsection}{\numberline {4.4}探索率与损失日志诊断}{10}{subsection.4.4}%
-\contentsline {section}{\numberline {5}实验结果与分析}{11}{section.5}%
-\contentsline {subsection}{\numberline {5.1}评价指标与结果来源}{11}{subsection.5.1}%
-\contentsline {subsection}{\numberline {5.2}各训练阶段的结果}{11}{subsection.5.2}%
-\contentsline {subsection}{\numberline {5.3}相同开发种子下的候选模型复测}{12}{subsection.5.3}%
-\contentsline {subsection}{\numberline {5.4}低分风险与配对差的进一步分析}{12}{subsection.5.4}%
-\contentsline {subsection}{\numberline {5.5}训练回退与恢复实验分析}{14}{subsection.5.5}%
-\contentsline {subsection}{\numberline {5.6}实时运行与行为分析}{14}{subsection.5.6}%
-\contentsline {subsection}{\numberline {5.7}实验结论的范围与后续验证}{14}{subsection.5.7}%
-\contentsline {subsection}{\numberline {5.8}项目工作总结}{15}{subsection.5.8}%
+\contentsline {section}{\numberline {1}项目背景与目标}{1}{section.1}%
+\contentsline {subsection}{\numberline {1.1}研究背景与任务目标}{1}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}研究内容与报告安排}{1}{subsection.1.2}%
+\contentsline {section}{\numberline {2}游戏环境与公共实验基础}{2}{section.2}%
+\contentsline {subsection}{\numberline {2.1}游戏规则与物理过程}{2}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}状态、动作与奖励定义}{2}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}图像预处理与时序信息}{3}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}回合终止、时间截断与环境一致性}{3}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}强化学习任务与长期回报}{4}{subsection.2.5}%
+\contentsline {subsection}{\numberline {2.6}共用系统结构与实时展示}{4}{subsection.2.6}%
+\contentsline {subsection}{\numberline {2.7}评价指标与数据使用原则}{5}{subsection.2.7}%
+\contentsline {section}{\numberline {3}DQN 方法与实验}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}算法原理}{6}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}动作价值与 Q-learning}{6}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}经验回放与目标网络}{6}{subsubsection.3.1.2}%
+\contentsline {subsubsection}{\numberline {3.1.3}探索机制与多步回报}{7}{subsubsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.2}模型实现与训练管理}{8}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}卷积价值网络}{8}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}训练循环与模型更新}{8}{subsubsection.3.2.2}%
+\contentsline {subsubsection}{\numberline {3.2.3}续训与回放状态保存}{9}{subsubsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.3}训练设置与日志诊断}{9}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}基础训练设置}{9}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}低学习率续训与策略保护}{10}{subsubsection.3.3.2}%
+\contentsline {subsubsection}{\numberline {3.3.3}后续恢复实验与评估协议}{10}{subsubsection.3.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.4}探索率与损失日志诊断}{10}{subsubsection.3.3.4}%
+\contentsline {subsection}{\numberline {3.4}开发结果与行为分析}{12}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}各训练阶段的结果}{12}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}相同开发种子下的候选模型复测}{12}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}低分风险与配对差的进一步分析}{13}{subsubsection.3.4.3}%
+\contentsline {subsubsection}{\numberline {3.4.4}训练回退与恢复实验分析}{14}{subsubsection.3.4.4}%
+\contentsline {subsubsection}{\numberline {3.4.5}实时运行与行为分析}{14}{subsubsection.3.4.5}%
+\contentsline {section}{\numberline {4}PPO 方法与实验}{16}{section.4}%
+\contentsline {subsection}{\numberline {4.1}算法原理}{16}{subsection.4.1}%
+\contentsline {subsubsection}{\numberline {4.1.1}PPO 的策略与价值学习}{16}{subsubsection.4.1.1}%
+\contentsline {subsubsection}{\numberline {4.1.2}GAE 优势估计与信用分配}{16}{subsubsection.4.1.2}%
+\contentsline {subsubsection}{\numberline {4.1.3}概率比裁剪与训练目标}{16}{subsubsection.4.1.3}%
+\contentsline {subsection}{\numberline {4.2}模型实现与训练管理}{17}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}PPO 策略与价值双网络}{17}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}训练循环与模型更新}{17}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}续训与变体状态保存}{18}{subsubsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.3}训练设置与开发选模}{18}{subsection.4.3}%
+\contentsline {subsubsection}{\numberline {4.3.1}PPO 训练阶段与单因素对照}{18}{subsubsection.4.3.1}%
+\contentsline {subsubsection}{\numberline {4.3.2}开发数据与候选选择}{20}{subsubsection.4.3.2}%
+\contentsline {subsubsection}{\numberline {4.3.3}KL 反馈与三次配对续训设置}{20}{subsubsection.4.3.3}%
+\contentsline {subsection}{\numberline {4.4}优化结果与负结果分析}{20}{subsection.4.4}%
+\contentsline {subsubsection}{\numberline {4.4.1}多次配对续训与选模稳定性}{21}{subsubsection.4.4.1}%
+\contentsline {subsubsection}{\numberline {4.4.2}改进措施的配对消融}{21}{subsubsection.4.4.2}%
+\contentsline {subsubsection}{\numberline {4.4.3}KL 控制过程与更新诊断}{22}{subsubsection.4.4.3}%
+\contentsline {section}{\numberline {5}统一测试与方法比较}{24}{section.5}%
+\contentsline {subsection}{\numberline {5.1}冻结候选与统一测试协议}{24}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}统一测试结果与配对比较}{24}{subsection.5.2}%
+\contentsline {subsection}{\numberline {5.3}PPO 的 GAE 消融}{25}{subsection.5.3}%
+\contentsline {subsection}{\numberline {5.4}学习机制与工程取舍}{25}{subsection.5.4}%
+\contentsline {subsection}{\numberline {5.5}比较结论与适用范围}{25}{subsection.5.5}%
+\contentsline {section}{\numberline {6}总结与局限}{26}{section.6}%
+\contentsline {subsection}{\numberline {6.1}项目工作总结}{26}{subsection.6.1}%
+\contentsline {subsection}{\numberline {6.2}局限与后续验证}{26}{subsection.6.2}%

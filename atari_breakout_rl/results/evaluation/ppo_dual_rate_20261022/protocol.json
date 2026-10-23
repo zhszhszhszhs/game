@@ -1,0 +1,39 @@
+{
+  "configuration": "atari_breakout_rl/configs/ppo_custom_dual_rate.yaml",
+  "configuration_sha256": "6dcf61f09ac7f5c190d12219d44c85e51ef23c983928d37fc52e55e018b343ad",
+  "source_model": "atari_breakout_rl/models/ppo_custom_fixed_angle_balanced_500k_20261022/best_model/best_model.zip",
+  "source_sha256": "2656cf1be128e20a0189f626f9b86b742407413a9f5d87795af154aae77131f1",
+  "source_selection": {
+    "criterion": "mean_reward",
+    "timesteps": 503808,
+    "mean_reward": 158.59375,
+    "median_reward": 80.5,
+    "std_reward": 138.8812125916875,
+    "episodes": 32,
+    "eval_seed": 31000,
+    "replay_buffer_path": null,
+    "replay_size": null
+  },
+  "training_seed": 46,
+  "requested_timesteps_per_arm": 500000,
+  "arms": {
+    "dual_rate": "ppo_custom_fixed_angle_dual_rate_500k_20261022",
+    "balanced_control": "ppo_custom_fixed_angle_dual_rate_control_500k_20261022"
+  },
+  "development": {
+    "seed": 31000,
+    "episodes": 32,
+    "n_envs": 8,
+    "criterion": "mean_reward"
+  },
+  "test": {
+    "first_seed": 91000,
+    "last_seed": 91049,
+    "episodes": 50,
+    "n_envs": 1,
+    "device": "cpu",
+    "selection_use": false,
+    "source_results": "source_heldout/ppo_results.json"
+  },
+  "note": "Configuration fixed before viewing the source scores on seeds 91000-91049. Test scores never select checkpoints."
+}

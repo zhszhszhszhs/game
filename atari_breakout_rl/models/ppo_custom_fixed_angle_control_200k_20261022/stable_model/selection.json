@@ -1,0 +1,9 @@
+{
+  "criterion": "median_reward_then_mean_reward",
+  "timesteps": 50000,
+  "median_reward": 59.5,
+  "mean_reward": 59.2,
+  "std_reward": 43.78310176312318,
+  "episodes": 10,
+  "eval_seed": 31000
+}

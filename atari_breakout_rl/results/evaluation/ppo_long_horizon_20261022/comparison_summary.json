@@ -1,0 +1,38 @@
+{
+  "rows": [
+    {
+      "model": "baseline",
+      "episodes": 50,
+      "mean": 50.34,
+      "median": 29.5,
+      "p25": 15.25,
+      "std": 57.91083145664548,
+      "max": 306.0
+    },
+    {
+      "model": "native",
+      "episodes": 50,
+      "mean": 88.54,
+      "median": 58.5,
+      "p25": 24.5,
+      "std": 90.07978907612961,
+      "max": 424.0
+    },
+    {
+      "model": "shaped",
+      "episodes": 50,
+      "mean": 57.34,
+      "median": 48.0,
+      "p25": 25.75,
+      "std": 47.4086954049571,
+      "max": 256.0
+    }
+  ],
+  "native_minus_starting_mean": 38.2,
+  "paired_ci95": [
+    9.899500000000002,
+    67.68
+  ],
+  "seed": 61000,
+  "episodes": 50
+}

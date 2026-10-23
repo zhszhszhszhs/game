@@ -1,0 +1,42 @@
+{
+  "algorithm": "ppo",
+  "status": "early_stopped",
+  "target_timesteps": 500000,
+  "timesteps": 400000,
+  "stage_timesteps": 400000,
+  "source_timesteps": 503808,
+  "optimizer_reset": true,
+  "ppo_variant": "dual_rate",
+  "training_reward": {
+    "paddle_hit_bonus": 0.0,
+    "life_loss_penalty": 0.0,
+    "monitor_reward": "native",
+    "evaluation_reward": "native"
+  },
+  "separate_critic": true,
+  "optimization_epochs": 2922,
+  "stage_optimization_epochs": 388,
+  "elapsed_seconds": 3270.533533507958,
+  "evaluation_seconds": 1682.5804276634008,
+  "device": "cuda:1",
+  "environment": {
+    "env_id": "FixedSpeedBreakout-v0",
+    "physics_version": 3,
+    "ball_speed": 2.0,
+    "physics_fps": 60,
+    "wrapper_frame_skip": 4,
+    "frame_stack": 4,
+    "screen_size": 84,
+    "repeat_action_probability": 0.0,
+    "auto_fire_on_life_loss": true,
+    "fire_on_reset": true,
+    "terminal_on_life_loss": false,
+    "clip_reward": false,
+    "max_num_frames_per_episode": 108000,
+    "paddle_width": 16.0,
+    "shrink_paddle_on_ceiling": false,
+    "hit_count_affects_angle": false
+  },
+  "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_dual_rate_500k_20261022/final_model.zip",
+  "best_eval_reward": 158.59375
+}

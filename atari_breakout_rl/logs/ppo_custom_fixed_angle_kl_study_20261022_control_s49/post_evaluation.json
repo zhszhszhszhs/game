@@ -1,0 +1,15 @@
+{
+  "status": "completed",
+  "seed": 141000,
+  "summary": {
+    "episodes": 50,
+    "mean_reward": 215.04,
+    "std_reward": 146.66314601835052,
+    "median_reward": 184.0,
+    "max_reward": 457.0,
+    "min_reward": 11.0,
+    "mean_episode_length": 2249.84
+  },
+  "selected_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_control_s49/best_model/best_model.zip",
+  "output": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_custom_fixed_angle_kl_study_20261022/ppo_custom_fixed_angle_kl_study_20261022_control_s49/ppo_results.csv"
+}

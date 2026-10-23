@@ -1,0 +1,30 @@
+{
+  "source": "atari_breakout_rl/models/ppo_custom_fixed_angle_long_native_500k_20261022/best_model/best_model.zip",
+  "sampling_seed": 72000,
+  "steps": 1024,
+  "minibatches": [
+    {
+      "actor_norm": 0.8613390326499939,
+      "critic_norm": 10.871326446533203,
+      "global_scale": 0.04584886166252295
+    },
+    {
+      "actor_norm": 0.9440191984176636,
+      "critic_norm": 7.304152488708496,
+      "global_scale": 0.06788953522605602
+    },
+    {
+      "actor_norm": 0.8865404725074768,
+      "critic_norm": 1.8519554138183594,
+      "global_scale": 0.2435203792688611
+    },
+    {
+      "actor_norm": 1.1241025924682617,
+      "critic_norm": 2.451986312866211,
+      "global_scale": 0.1853651847272103
+    }
+  ],
+  "median_actor_norm": 0.9152798354625702,
+  "median_critic_norm": 4.8780694007873535,
+  "median_global_scale": 0.12662735997663316
+}

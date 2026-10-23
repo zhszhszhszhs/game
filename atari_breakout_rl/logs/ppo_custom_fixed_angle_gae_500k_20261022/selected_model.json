@@ -1,0 +1,29 @@
+{
+  "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_gae_500k_20261022/best_model/best_model.zip",
+  "criterion": "stable_near_mean",
+  "mean_tolerance": 0.05,
+  "minimum_mean_reward": 162.5390625,
+  "mean_best": {
+    "criterion": "mean_reward",
+    "timesteps": 503808,
+    "mean_reward": 171.09375,
+    "median_reward": 106.0,
+    "std_reward": 142.43361597929578,
+    "episodes": 32,
+    "eval_seed": 111000,
+    "evaluation_protocol": "fixed_episode_seeds",
+    "replay_buffer_path": null,
+    "replay_size": null
+  },
+  "median_best": {
+    "criterion": "median_reward_then_mean_reward",
+    "timesteps": 200000,
+    "median_reward": 117.5,
+    "mean_reward": 156.65625,
+    "std_reward": 119.83937410524764,
+    "episodes": 32,
+    "eval_seed": 111000,
+    "evaluation_protocol": "fixed_episode_seeds"
+  },
+  "selected_kind": "best_model"
+}

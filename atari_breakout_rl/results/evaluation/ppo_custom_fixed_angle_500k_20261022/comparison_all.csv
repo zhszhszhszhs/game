@@ -1,0 +1,4 @@
+agent,episodes,mean_reward,std_reward,median_reward,max_reward,min_reward,mean_episode_length
+Random,20,1.05,1.4654350889752845,1.0,6.0,0.0,100.2
+PPO,20,35.0,24.298148077579903,25.5,86.0,8.0,684.0
+Existing DQN,20,256.0,82.17542211634814,251.0,397.0,40.0,1772.25

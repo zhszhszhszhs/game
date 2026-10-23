@@ -1,6 +1,7 @@
 """Reproducibility, output files and device selection."""
 import csv
 import json
+import os
 import platform
 from importlib.metadata import version
 from pathlib import Path
@@ -9,7 +10,8 @@ import numpy as np
 import torch
 from stable_baselines3.common.utils import set_random_seed
 
-ROOT = Path(__file__).resolve().parents[1]
+# Queued studies execute a frozen source snapshot against the same project data.
+ROOT = Path(os.environ.get('BREAKOUT_PROJECT_ROOT', Path(__file__).resolve().parents[1])).resolve()
 
 
 def setup(seed, device='auto', threads=4):

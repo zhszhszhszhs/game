@@ -1,0 +1,199 @@
+{
+  "training_seed": 46,
+  "notes": [
+    "Development-only diagnosis; control training has not completed.",
+    "Post-update critic metrics measure fit to rollout targets, not value generalization."
+  ],
+  "runs": {
+    "dual_rate": {
+      "metrics": {
+        "train/approx_kl": {
+          "n": 97,
+          "median": 0.00016010327090043575,
+          "last": 5.430209421319887e-05
+        },
+        "train/entropy_loss": {
+          "n": 97,
+          "median": -0.3262460194528103,
+          "last": -0.3417530972510576
+        },
+        "train/explained_variance": {
+          "n": 97,
+          "median": 0.6467007398605347,
+          "last": 0.41027748584747314
+        },
+        "train/value_ev_after_joint": {
+          "n": 97,
+          "median": 0.8820960521697998,
+          "last": 0.7945669293403625
+        },
+        "train/value_ev_after_extra": {
+          "n": 97,
+          "median": 0.9105837345123291,
+          "last": 0.849920392036438
+        },
+        "eval/timeout_rate": {
+          "n": 5,
+          "median": 0.0,
+          "last": 0.0
+        },
+        "extra_critic": {
+          "n": 97,
+          "fraction_mse_reduced": 0.9690721649484536,
+          "median_relative_mse_reduction": 0.1896013116603843
+        }
+      },
+      "development": [
+        {
+          "steps": 0,
+          "mean": 158.59375,
+          "median": 80.5,
+          "std": 138.8812125916875,
+          "p25": 52.75,
+          "fraction_below_50": 0.25,
+          "max_length": 3189
+        },
+        {
+          "steps": 100000,
+          "mean": 150.625,
+          "median": 96.0,
+          "std": 132.51338375801896,
+          "p25": 33.5,
+          "fraction_below_50": 0.34375,
+          "max_length": 3058
+        },
+        {
+          "steps": 200000,
+          "mean": 136.40625,
+          "median": 99.5,
+          "std": 117.9790392863813,
+          "p25": 48.0,
+          "fraction_below_50": 0.25,
+          "max_length": 27000
+        },
+        {
+          "steps": 300000,
+          "mean": 158.53125,
+          "median": 132.5,
+          "std": 127.38033216881443,
+          "p25": 54.75,
+          "fraction_below_50": 0.21875,
+          "max_length": 27000
+        },
+        {
+          "steps": 400000,
+          "mean": 121.4375,
+          "median": 83.0,
+          "std": 122.11135734955205,
+          "p25": 31.75,
+          "fraction_below_50": 0.375,
+          "max_length": 3449
+        }
+      ],
+      "runtime": {
+        "status": "early_stopped",
+        "pid": 4161515,
+        "timesteps": 400000,
+        "target_timesteps": 500000,
+        "elapsed_seconds": 3495.276580732316,
+        "evaluation_seconds": 1682.5804276634008,
+        "sampling_and_training_seconds": 1812.696153068915,
+        "updated_at": "2026-10-22T07:22:26.374187+00:00",
+        "heldout_mean_reward": 128.12,
+        "heldout_results": "/data/zhs/game/atari_breakout_rl/results/evaluation/ppo_dual_rate_20261022/ppo_custom_fixed_angle_dual_rate_500k_20261022/ppo_results.csv"
+      }
+    },
+    "dual_rate_control": {
+      "metrics": {
+        "train/approx_kl": {
+          "n": 102,
+          "median": 0.00015248425188474357,
+          "last": 6.783244680264033e-05
+        },
+        "train/entropy_loss": {
+          "n": 102,
+          "median": -0.2983673370908946,
+          "last": -0.277107423171401
+        },
+        "train/explained_variance": {
+          "n": 102,
+          "median": 0.6995069086551666,
+          "last": 0.7634163498878479
+        },
+        "train/value_ev_after_joint": {
+          "n": 102,
+          "median": 0.8345609307289124,
+          "last": 0.8371155261993408
+        },
+        "eval/timeout_rate": {
+          "n": 5,
+          "median": 0.03125,
+          "last": 0.03125
+        }
+      },
+      "development": [
+        {
+          "steps": 0,
+          "mean": 158.59375,
+          "median": 80.5,
+          "std": 138.8812125916875,
+          "p25": 52.75,
+          "fraction_below_50": 0.25,
+          "max_length": 3189
+        },
+        {
+          "steps": 100000,
+          "mean": 123.40625,
+          "median": 108.5,
+          "std": 98.47393670884443,
+          "p25": 48.75,
+          "fraction_below_50": 0.25,
+          "max_length": 27000
+        },
+        {
+          "steps": 200000,
+          "mean": 167.53125,
+          "median": 103.0,
+          "std": 137.4643099987684,
+          "p25": 59.5,
+          "fraction_below_50": 0.125,
+          "max_length": 3502
+        },
+        {
+          "steps": 300000,
+          "mean": 143.9375,
+          "median": 111.0,
+          "std": 115.87842160536188,
+          "p25": 70.75,
+          "fraction_below_50": 0.15625,
+          "max_length": 27000
+        },
+        {
+          "steps": 400000,
+          "mean": 161.15625,
+          "median": 126.0,
+          "std": 119.71374956928507,
+          "p25": 79.25,
+          "fraction_below_50": 0.1875,
+          "max_length": 27000
+        }
+      ],
+      "runtime": {
+        "status": "training",
+        "pid": 4161661,
+        "timesteps": 416000,
+        "target_timesteps": 500000,
+        "elapsed_seconds": 4651.199580622837,
+        "evaluation_seconds": 2557.10459641926,
+        "sampling_and_training_seconds": 2094.094984203577,
+        "updated_at": "2026-10-22T07:41:43.658201+00:00",
+        "optimization_epochs": 2938
+      }
+    }
+  },
+  "gae_decay_scale": {
+    "0.98": 40.16064257028107,
+    "0.99": 66.88963210702333,
+    "0.995": 100.25062656641649
+  }
+}

@@ -1,0 +1,71 @@
+{
+  "algorithm": "ppo",
+  "status": "completed",
+  "target_timesteps": 500000,
+  "timesteps": 503808,
+  "stage_timesteps": 503808,
+  "source_timesteps": 500000,
+  "optimizer_reset": true,
+  "ppo_variant": "adaptive_kl",
+  "training_reward": {
+    "paddle_hit_bonus": 0.0,
+    "life_loss_penalty": 0.0,
+    "monitor_reward": "native",
+    "evaluation_reward": "native"
+  },
+  "separate_critic": true,
+  "optimization_epochs": 3706,
+  "stage_optimization_epochs": 492,
+  "elapsed_seconds": 4035.0870983768255,
+  "evaluation_seconds": 2620.493186529726,
+  "device": "cuda:0",
+  "environment": {
+    "env_id": "FixedSpeedBreakout-v0",
+    "physics_version": 3,
+    "ball_speed": 2.0,
+    "physics_fps": 60,
+    "wrapper_frame_skip": 4,
+    "frame_stack": 4,
+    "screen_size": 84,
+    "repeat_action_probability": 0.0,
+    "auto_fire_on_life_loss": true,
+    "fire_on_reset": true,
+    "terminal_on_life_loss": false,
+    "clip_reward": false,
+    "max_num_frames_per_episode": 108000,
+    "paddle_width": 16.0,
+    "shrink_paddle_on_ceiling": false,
+    "hit_count_affects_angle": false
+  },
+  "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48/final_model.zip",
+  "best_eval_reward": 234.53125,
+  "selected_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48/stable_model/best_model.zip",
+  "checkpoint_selection": {
+    "criterion": "stable_near_mean",
+    "mean_tolerance": 0.05,
+    "minimum_mean_reward": 222.8046875,
+    "mean_best": {
+      "criterion": "mean_reward",
+      "timesteps": 503808,
+      "mean_reward": 234.53125,
+      "median_reward": 185.5,
+      "std_reward": 171.54354118834524,
+      "episodes": 32,
+      "eval_seed": 131000,
+      "evaluation_protocol": "fixed_episode_seeds",
+      "replay_buffer_path": null,
+      "replay_size": null
+    },
+    "median_best": {
+      "criterion": "median_reward_then_mean_reward",
+      "timesteps": 400000,
+      "median_reward": 203.0,
+      "mean_reward": 231.5625,
+      "std_reward": 148.24956523966605,
+      "episodes": 32,
+      "eval_seed": 131000,
+      "evaluation_protocol": "fixed_episode_seeds"
+    },
+    "selected_kind": "stable_model"
+  }
+}

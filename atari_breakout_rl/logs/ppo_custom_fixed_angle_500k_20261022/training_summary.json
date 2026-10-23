@@ -1,0 +1,32 @@
+{
+  "algorithm": "ppo",
+  "status": "completed",
+  "target_timesteps": 500000,
+  "timesteps": 500736,
+  "stage_timesteps": 500736,
+  "optimization_epochs": 1950,
+  "stage_optimization_epochs": 1950,
+  "elapsed_seconds": 1228.0907910428941,
+  "evaluation_seconds": 138.61298645474017,
+  "device": "cuda:1",
+  "environment": {
+    "env_id": "FixedSpeedBreakout-v0",
+    "physics_version": 3,
+    "ball_speed": 2.0,
+    "physics_fps": 60,
+    "wrapper_frame_skip": 4,
+    "frame_stack": 4,
+    "screen_size": 84,
+    "repeat_action_probability": 0.0,
+    "auto_fire_on_life_loss": true,
+    "fire_on_reset": true,
+    "terminal_on_life_loss": false,
+    "clip_reward": false,
+    "max_num_frames_per_episode": 108000,
+    "paddle_width": 16.0,
+    "shrink_paddle_on_ceiling": false,
+    "hit_count_affects_angle": false
+  },
+  "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_500k_20261022/final_model.zip",
+  "best_eval_reward": 58.0
+}

@@ -1,0 +1,29 @@
+{
+  "model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48/stable_model/best_model.zip",
+  "criterion": "stable_near_mean",
+  "mean_tolerance": 0.05,
+  "minimum_mean_reward": 222.8046875,
+  "mean_best": {
+    "criterion": "mean_reward",
+    "timesteps": 503808,
+    "mean_reward": 234.53125,
+    "median_reward": 185.5,
+    "std_reward": 171.54354118834524,
+    "episodes": 32,
+    "eval_seed": 131000,
+    "evaluation_protocol": "fixed_episode_seeds",
+    "replay_buffer_path": null,
+    "replay_size": null
+  },
+  "median_best": {
+    "criterion": "median_reward_then_mean_reward",
+    "timesteps": 400000,
+    "median_reward": 203.0,
+    "mean_reward": 231.5625,
+    "std_reward": 148.24956523966605,
+    "episodes": 32,
+    "eval_seed": 131000,
+    "evaluation_protocol": "fixed_episode_seeds"
+  },
+  "selected_kind": "stable_model"
+}

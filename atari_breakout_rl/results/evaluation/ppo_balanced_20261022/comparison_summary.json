@@ -1,0 +1,70 @@
+{
+  "seed_range": [
+    81000,
+    81049
+  ],
+  "episodes": 50,
+  "training_seeds": 1,
+  "models": {
+    "source": {
+      "mean": 89.28,
+      "median": 62.5,
+      "p25": 35.25,
+      "std": 88.00319085124131,
+      "min": 10.0,
+      "max": 413.0,
+      "fraction_below_50": 0.42,
+      "source": "atari_breakout_rl/results/evaluation/ppo_balanced_20261022/source_heldout/ppo_results.csv"
+    },
+    "balanced": {
+      "mean": 100.76,
+      "median": 73.0,
+      "p25": 33.25,
+      "std": 98.84241194952702,
+      "min": 8.0,
+      "max": 413.0,
+      "fraction_below_50": 0.44,
+      "source": "atari_breakout_rl/results/evaluation/ppo_balanced_20261022/ppo_custom_fixed_angle_balanced_500k_20261022/ppo_results.csv"
+    },
+    "control": {
+      "mean": 81.84,
+      "median": 72.0,
+      "p25": 29.0,
+      "std": 67.98481006813212,
+      "min": 4.0,
+      "max": 323.0,
+      "fraction_below_50": 0.4,
+      "source": "atari_breakout_rl/results/evaluation/ppo_balanced_20261022/ppo_custom_fixed_angle_balanced_control_500k_20261022/ppo_results.csv"
+    }
+  },
+  "paired_comparisons": {
+    "balanced_minus_source": {
+      "mean_difference": 11.48,
+      "bootstrap_95_percent_ci": [
+        -29.0215,
+        50.94
+      ],
+      "win_fraction": 0.56,
+      "tie_fraction": 0.0
+    },
+    "balanced_minus_control": {
+      "mean_difference": 18.92,
+      "bootstrap_95_percent_ci": [
+        -13.52,
+        52.16
+      ],
+      "win_fraction": 0.6,
+      "tie_fraction": 0.0
+    },
+    "control_minus_source": {
+      "mean_difference": -7.44,
+      "bootstrap_95_percent_ci": [
+        -39.9,
+        22.880499999999955
+      ],
+      "win_fraction": 0.48,
+      "tie_fraction": 0.04
+    }
+  },
+  "caveat": "Episode bootstrap intervals condition on these trained policies; they do not measure variation across training seeds."
+}

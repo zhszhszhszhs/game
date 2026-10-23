@@ -16,6 +16,7 @@ def main():
     parser.add_argument('--run-name', required=True)
     parser.add_argument('--log-dir', type=Path, default=ROOT / 'logs')
     parser.add_argument('--status', action='store_true')
+    parser.add_argument('--algo', choices=['dqn', 'ppo', 'ppo-study'], default='dqn')
     args, remaining = parser.parse_known_args()
     if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_.-]*', args.run_name):
         parser.error('run-name must be a simple directory name')
@@ -26,7 +27,8 @@ def main():
         try:
             os.kill(data['pid'], 0)
             command = Path(f"/proc/{data['pid']}/cmdline").read_bytes()
-            data['process_running'] = str(ROOT / 'src/train.py').encode() in command
+            script = data.get('script', str(ROOT / 'src/train.py'))
+            data['process_running'] = script.encode() in command
         except (ProcessLookupError, FileNotFoundError):
             data['process_running'] = False
         runtime = logs / args.run_name / 'runtime.json'
@@ -38,12 +40,13 @@ def main():
         parser.error('Run already exists; use a new run-name or --status')
     logs.mkdir(parents=True, exist_ok=True)
     console = logs / f'{args.run_name}.console.log'
-    command = [sys.executable, '-u', str(ROOT / 'src/train.py'),
+    script = ROOT / 'src' / {'dqn':'train.py','ppo':'train_ppo.py','ppo-study':'run_ppo_study.py'}[args.algo]
+    command = [sys.executable, '-u', str(script),
                '--run-name', args.run_name, '--log-dir', str(logs), *remaining]
     with console.open('x') as output:
         process = subprocess.Popen(command, cwd=ROOT, stdin=subprocess.DEVNULL,
             stdout=output, stderr=subprocess.STDOUT, start_new_session=True)
-    data = dict(pid=process.pid, command=command, console=str(console),
+    data = dict(pid=process.pid, command=command, console=str(console), script=str(script), algorithm=args.algo,
                 started_at=datetime.now(timezone.utc).isoformat())
     manifest.write_text(json.dumps(data, indent=2) + '\n')
     print(json.dumps(data, indent=2, ensure_ascii=False))

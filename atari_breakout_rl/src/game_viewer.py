@@ -28,7 +28,7 @@ class GameViewer:
         paths = sorted(self.model_dir.rglob('*.zip'), key=lambda p: p.stat().st_mtime, reverse=True)
         return [str(p.relative_to(self.model_dir)) for p in paths
                 if p.resolve().is_relative_to(self.model_dir.resolve())
-                and p.relative_to(self.model_dir).parts[0].startswith('dqn_custom_fixed_angle_')
+                and p.relative_to(self.model_dir).parts[0].startswith(('dqn_custom_fixed_angle_', 'ppo_custom_fixed_angle_'))
                 and 'smoke' not in p.relative_to(self.model_dir).parts[0]]
 
     def snapshot(self):
@@ -119,7 +119,8 @@ class GameViewer:
     def _play(self, agent, seed):
         env = None
         try:
-            from stable_baselines3 import DQN
+            from model_io import load_model
+            from stable_baselines3.common.utils import check_for_correct_spaces
             from env import environment_spec, get_lives, make_env
             from utils import setup
             setup(seed, 'cpu', threads=1)
@@ -132,11 +133,11 @@ class GameViewer:
                 elif capturing:
                     frames.append((frame.copy(), reward, lives))
 
-            model = None if agent == 'random' else DQN.load(self.model_dir / agent, device='cpu')
+            model = None if agent == 'random' else load_model(self.model_dir / agent, device='cpu')
             spec = environment_spec(model)
             env = make_env(seed, render_mode='rgb_array', frame_callback=capture)
             if model is not None:
-                model.set_env(env)
+                check_for_correct_spaces(env, model.observation_space, model.action_space)
             with self.lock:
                 self.state['environment'] = spec
             meanings = env.env_method('get_action_meanings')[0]

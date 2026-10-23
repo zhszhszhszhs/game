@@ -1,0 +1,64 @@
+\section{统一测试与方法比较}
+\label{sec:comparison}
+\subsection{冻结候选与统一测试协议}
+本部分固定已有 DQN 推荐模型、GAE 对照的两个 PPO 模型及其共同起点，均在相同物理规则、原始奖励、完整五生命游戏和 $4\times84\times84$ 输入下，用 CPU 确定性动作运行相同开局的 50 局测试。随机基线在相同任务和开局设置下均匀采样动作。所有结果均来自逐局实际运行，不由汇总分数反推。
+
+主比较采用开发均分更高的 PPO $\lambda=0.98$（196.00，高于 0.99 的 171.09）；0.99 作为补充消融同时报告，而不根据其测试均分较高事后更换主候选。DQN 推荐模型仍为原开发流程选出的低学习率续训最佳检查点。
+
+\subsection{统一测试结果与配对比较}
+\begin{table}[!htbp]
+ \centering\small
+ \caption{相同 50 个测试种子下的固定模型与随机基线}\label{tab:final-comparison}
+ \begin{tabularx}{\linewidth}{Y r r r c c}
+ \toprule
+ 固定模型 & 均分 & 标准差 & 中位数 & 低于50分 & 截断\\
+ \midrule
+ 随机策略 & \RandomMean & \RandomStd & \RandomMedian & \RandomLow/50 & \RandomTimeout/50\\
+ DQN & \DQNMean & \DQNStd & \DQNMedian & \DQNLow/50 & \DQNTimeout/50\\
+ PPO 共同起点 & \SourceMean & \SourceStd & \SourceMedian & \SourceLow/50 & \SourceTimeout/50\\
+ PPO $\lambda=0.98$ & \PPOControlMean & \PPOControlStd & \PPOControlMedian & \PPOControlLow/50 & \PPOControlTimeout/50\\
+ PPO $\lambda=0.99$ & \PPOGaeMean & \PPOGaeStd & \PPOGaeMedian & \PPOGaeLow/50 & \PPOGaeTimeout/50\\
+ \bottomrule
+ \end{tabularx}
+\end{table}
+
+对相同种子计算 $\Delta_i=R_i^{\mathrm{DQN}}-R_i^{\mathrm{PPO},\lambda=0.98}$。配对均分差为 \DQNPPODiff\ 分，DQN 胜/平/负为 \DQNPPOWins/\DQNPPOTies/\DQNPPOLosses。
+
+\reportfigure{images/dqn_ppo_comparison.png}{DQN 与 PPO 的统一测试}{50 个固定种子的得分分布及 DQN 减 PPO 主候选的配对差。}{统一测试协议下的实际结果。左侧展示全部逐局分数与箱线图，菱形表示均值；右侧为按大小排序的 DQN 减 PPO $\lambda=0.98$ 得分差，负值表示相应开局 PPO 更高。}{fig:method-comparison}
+
+对完整回合对反复重采样，得到配对均分差的 95\% bootstrap 区间 $\DQNPPOCI$。这一比较衡量固定模型在当前测试开局上的条件差异，不覆盖独立训练波动。截断表示达到统一时间上限，不等于通关；局长增加也不必然表示单位交互得分效率提高。
+
+\subsection{PPO 的 GAE 消融}
+表\ref{tab:final-comparison}中的共同起点与两组 PPO 使用相同 50 个种子，提供同起点后续训练的评价。共同起点的均分为 \SourceMean、中位数为 \SourceMedian，第 25 百分位为 \SourcePxxv；$\lambda=0.98$ 和 0.99 的第 25 百分位分别为 \PPOControlPxxv\ 和 \PPOGaePxxv。两组新增步数与训练设置相同，只有 GAE $\lambda$ 不同，主候选仍按开发数据选择。
+
+0.99 相对 0.98 的配对均分差为 \GaeControlDiff，95\% bootstrap 区间为 $\GaeControlCI$。应同时观察区间、低分尾部和截断，不能只因一个样本均分更高就认定该设置普遍更优；两组各只有一个训练种子。
+
+\subsection{学习机制与工程取舍}
+两种方法处理相同图像与动作空间，但优化对象和数据利用方式不同。DQN 通过 Q 值排序间接产生动作，PPO 直接更新策略分布；两者的差异不能只归结为某一个超参数。
+
+\begin{table}[!htbp]
+ \centering\small
+ \caption{本项目 DQN 与 PPO 的机制比较}\label{tab:method-comparison}
+ \begin{tabularx}{\linewidth}{P{2.3cm}YY}
+ \toprule
+ 方面 & DQN & PPO\\
+ \midrule
+ 优化对象 & 四动作 Q 值的 TD 回归 & 裁剪策略目标与状态价值回归\\
+ 数据利用 & 离策略；长期回放、随机抽样复用 & 同策略；当前 rollout 内多轮更新\\
+ 稳定机制 & 目标 Q 网络、回放与 Huber & 概率比裁剪、优势标准化、KL 保护\\
+ 探索方式 & $\varepsilon$-greedy & 概率采样与熵奖励\\
+ 最终网络 & 在线 Q 网络，另有目标网络 & 独立策略/价值 CNN，推理只用策略\\
+ 续训状态 & 模型与回放分开保存 & 模型与优化器保存，重新采集 rollout\\
+ 主要取舍 & 回放复用经验，图像回放内存较大 & 轨迹更新及时，跨 rollout 样本复用受限\\
+ \bottomrule
+ \end{tabularx}
+\end{table}
+
+PPO 的裁剪没有消除训练波动，DQN 的经验回放也没有保证继续训练必然改善。两个方法都需要起点评估、检查点保留及独立开发集选模；训练损失不宜跨算法直接比较。
+
+\subsection{比较结论与适用范围}
+DQN 的第 25 百分位为 \DQNPxxv，高于主 PPO 的 \PPOControlPxxv；低于 50 分的局数分别为 \DQNLow/50 与 \PPOControlLow/50。结合均分、中位数与配对区间，这组固定模型的差异也体现在典型表现和低分尾部。
+
+PPO 两组分别有 \PPOControlTimeout/50、\PPOGaeTimeout/50 局达到时间上限，DQN 为 \DQNTimeout/50；所有候选均未取得 864 分完整通关。较长轨迹不能被解释为更强的通关能力，训练预算和重复性带来的结论边界见第\ref{sec:conclusion}节。
+
+\FloatBarrier

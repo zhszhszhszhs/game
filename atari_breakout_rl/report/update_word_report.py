@@ -1,13 +1,15 @@
-"""Insert the measured report figures into the existing DOCX, preserving styles.
+"""Update measured figures and PPO supplements in the existing styled DOCX.
 
-Uses only the Python standard library. Existing cover, equations, tables and
-diagrams remain in the document. The update can be repeated after rebuilding PNGs.
+Uses only the Python standard library. Preserves the original outline, adds PPO
+within its sections, and appends the DQN/PPO comparison. Repeated updates replace
+tagged generated blocks rather than duplicating them.
 """
 from pathlib import Path
 import re
 import struct
 import zipfile
 from xml.dom import minidom
+from supplement_ppo_word import cleanup, supplement
 
 ROOT = Path(__file__).resolve().parents[1]
 PATH = ROOT / 'report/基于DQN的Breakout智能体课程报告.docx'
@@ -60,6 +62,13 @@ def main():
         files = {item.filename: source.read(item.filename) for item in source.infolist()}
     document = minidom.parseString(files['word/document.xml'])
     relationships = minidom.parseString(files['word/_rels/document.xml.rels'])
+    cleanup(document, relationships)
+    original_paragraphs = {id(p) for p in document.getElementsByTagName('w:p')}
+    original_caption_numbers = {}
+    for p in document.getElementsByTagName('w:p'):
+        match = re.match(r'^图(\d+)\s+', text_of(p))
+        if match:
+            original_caption_numbers[id(p)] = int(match.group(1))
     captions = {text_of(p): p for p in document.getElementsByTagName('w:p') if text_of(p).startswith('图')}
 
     def find_prefix(prefix):
@@ -248,8 +257,10 @@ def main():
         if removing and child.nodeName != 'w:sectPr':
             body.removeChild(child)
 
+    supplement(document, files, find_prefix, set_text, insert_image)
     number = 0
     figure_numbers = {}
+    renumbered = {}
     for p in document.getElementsByTagName('w:p'):
         text = text_of(p)
         if re.match(r'^图\d+\s+', text):
@@ -257,6 +268,8 @@ def main():
             if not previous.getElementsByTagName('a:blip'):
                 continue
             number += 1
+            if id(p) in original_caption_numbers:
+                renumbered[original_caption_numbers[id(p)]] = number
             description = re.sub(r'^图\d+\s*', '', text)
             set_text(p, f'图{number}  {description}')
             figure_numbers[description] = number
@@ -264,8 +277,13 @@ def main():
     behavior_number = next(n for d, n in figure_numbers.items() if d.startswith('同一局中的成功接球'))
     for p in document.getElementsByTagName('w:p'):
         text = text_of(p)
+        if id(p) in original_paragraphs and id(p) not in original_caption_numbers:
+            updated = re.sub(r'图(\d+)', lambda match: '图' + str(renumbered.get(int(match.group(1)), int(match.group(1)))), text)
+            if updated != text:
+                set_text(p, updated)
+                text = updated
         if text.startswith('在42000至42029的30个开发种子上'):
-            set_text(p, text.replace('图6直接使用', f'图{distribution_number}直接使用'))
+            set_text(p, re.sub(r'图\d+直接使用', f'图{distribution_number}直接使用', text))
         elif re.match(r'^图\d+取自推荐最佳模型', text):
             set_text(p, re.sub(r'^图\d+', f'图{behavior_number}', text))
 

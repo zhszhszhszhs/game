@@ -1,0 +1,102 @@
+{
+  "run": "ppo_custom_fixed_angle_500k_20261022",
+  "training": {
+    "algorithm": "ppo",
+    "status": "completed",
+    "target_timesteps": 500000,
+    "timesteps": 500736,
+    "stage_timesteps": 500736,
+    "optimization_epochs": 1950,
+    "stage_optimization_epochs": 1950,
+    "elapsed_seconds": 1228.0907910428941,
+    "evaluation_seconds": 138.61298645474017,
+    "device": "cuda:1",
+    "environment": {
+      "env_id": "FixedSpeedBreakout-v0",
+      "physics_version": 3,
+      "ball_speed": 2.0,
+      "physics_fps": 60,
+      "wrapper_frame_skip": 4,
+      "frame_stack": 4,
+      "screen_size": 84,
+      "repeat_action_probability": 0.0,
+      "auto_fire_on_life_loss": true,
+      "fire_on_reset": true,
+      "terminal_on_life_loss": false,
+      "clip_reward": false,
+      "max_num_frames_per_episode": 108000,
+      "paddle_width": 16.0,
+      "shrink_paddle_on_ceiling": false,
+      "hit_count_affects_angle": false
+    },
+    "final_model": "/data/zhs/game/atari_breakout_rl/models/ppo_custom_fixed_angle_500k_20261022/final_model.zip",
+    "best_eval_reward": 58.0
+  },
+  "best_model_selection": {
+    "criterion": "mean_reward",
+    "timesteps": 400000,
+    "mean_reward": 58.0,
+    "median_reward": 58.5,
+    "std_reward": 34.161381705077446,
+    "episodes": 10,
+    "eval_seed": 31000,
+    "replay_buffer_path": null,
+    "replay_size": null
+  },
+  "test_seeds": [
+    41000,
+    41001,
+    41002,
+    41003,
+    41004,
+    41005,
+    41006,
+    41007,
+    41008,
+    41009,
+    41010,
+    41011,
+    41012,
+    41013,
+    41014,
+    41015,
+    41016,
+    41017,
+    41018,
+    41019
+  ],
+  "results": [
+    {
+      "agent": "Random",
+      "episodes": 20,
+      "mean_reward": 1.05,
+      "std_reward": 1.4654350889752845,
+      "median_reward": 1.0,
+      "max_reward": 6.0,
+      "min_reward": 0.0,
+      "mean_episode_length": 100.2
+    },
+    {
+      "agent": "PPO",
+      "episodes": 20,
+      "mean_reward": 35.0,
+      "std_reward": 24.298148077579903,
+      "median_reward": 25.5,
+      "max_reward": 86.0,
+      "min_reward": 8.0,
+      "mean_episode_length": 684.0
+    },
+    {
+      "agent": "Existing DQN",
+      "episodes": 20,
+      "mean_reward": 256.0,
+      "std_reward": 82.17542211634814,
+      "median_reward": 251.0,
+      "max_reward": 397.0,
+      "min_reward": 40.0,
+      "mean_episode_length": 1772.25
+    }
+  ],
+  "ppo_model_sha256": "35d4c084ed6f7a365a1f0670d4943246a8e62fcc24cd294344dd08586bd71f27",
+  "comparison_note": "The existing DQN was trained in multiple stages; this is not an equal-budget algorithm comparison."
+}

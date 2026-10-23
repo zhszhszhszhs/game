@@ -1,0 +1,51 @@
+{
+  "seed_range": [
+    91000,
+    91049
+  ],
+  "episodes": 50,
+  "training_seeds": 1,
+  "models": {
+    "source": {
+      "mean": 128.12,
+      "median": 101.0,
+      "p25": 41.75,
+      "fraction_below50": 0.32
+    },
+    "dual_rate": {
+      "mean": 128.12,
+      "median": 101.0,
+      "p25": 41.75,
+      "fraction_below50": 0.32
+    },
+    "control": {
+      "mean": 134.0,
+      "median": 95.0,
+      "p25": 56.25,
+      "fraction_below50": 0.2
+    }
+  },
+  "paired": {
+    "control_minus_source": {
+      "mean_difference": 5.88,
+      "bootstrap_95_ci": [
+        -36.2205,
+        48.74049999999996
+      ]
+    },
+    "dual_rate_minus_source": {
+      "mean_difference": 0.0,
+      "bootstrap_95_ci": [
+        0.0,
+        0.0
+      ]
+    },
+    "dual_rate_minus_control": {
+      "mean_difference": -5.88,
+      "bootstrap_95_ci": [
+        -49.06,
+        36.60049999999996
+      ]
+    }
+  }
+}

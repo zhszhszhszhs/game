@@ -1,0 +1,7 @@
+run,seed,repeat,arm,selected_kind,selected_step,selected_mean,selected_median,mean_best_step,mean_best_reward
+ppo_custom_fixed_angle_kl_study_20261022_adaptive_s48,48,1,adaptive,stable_model,400000,231.5625,203.0,503808,234.53125
+ppo_custom_fixed_angle_kl_study_20261022_control_s48,48,1,control,best_model,200000,240.0625,245.5,200000,240.0625
+ppo_custom_fixed_angle_kl_study_20261022_adaptive_s49,49,2,adaptive,best_model,500000,230.40625,201.5,500000,230.40625
+ppo_custom_fixed_angle_kl_study_20261022_control_s49,49,2,control,best_model,300000,165.71875,99.5,300000,165.71875
+ppo_custom_fixed_angle_kl_study_20261022_adaptive_s50,50,3,adaptive,best_model,200000,182.71875,136.5,200000,182.71875
+ppo_custom_fixed_angle_kl_study_20261022_control_s50,50,3,control,best_model,503808,222.90625,167.5,503808,222.90625

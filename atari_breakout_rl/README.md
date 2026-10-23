@@ -1,6 +1,8 @@
-# 基于 DQN 的 Breakout 智能体
+# 基于 DQN / PPO 的 Breakout 智能体
 
-研究生强化学习课程项目：自制固定球速 Breakout + Gymnasium + Stable-Baselines3 DQN（CnnPolicy）。强化学习方法讲解见 [技术报告](TECHNICAL_REPORT.md)，修改与实验结果见 [修改汇总](CHANGE_SUMMARY.md)。
+研究生强化学习课程项目：自制固定球速 Breakout + Gymnasium + Stable-Baselines3 DQN / PPO（CnnPolicy）。原 DQN 方法讲解见 [技术报告](TECHNICAL_REPORT.md)，修改与实验结果见 [修改汇总](CHANGE_SUMMARY.md)。
+
+完整课程报告见 [DQN 与 PPO 实验报告](report/README.md)及 [PDF](report/latex/基于DQN与PPO的Breakout课程实验报告.pdf)，按公共基础、DQN、PPO、统一比较和总结组织。
 
 ## 安装
 
@@ -45,9 +47,28 @@ tensorboard --logdir logs/ --host 127.0.0.1 --port 6006
 
 参数可由命令行覆盖，详见 `python src/train.py --help`。`auto` 自动选择 CUDA 或 CPU。基础配置预算 500k；DQN 使用 CNN、经验回放、目标网络、ε-greedy、Huber loss 和 Adam。训练保存 checkpoint、均分最佳及中位数最佳模型。训练预算不保证收敛。
 
-## 最佳模型和续训
+## PPO 训练与评估
 
-当前推荐模型：`models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip`。50 局开发评估均分 283.48，额外相同的 30 个开发种子复测均分 260.27；两套评估分别报告。后续三步回报与扩大回放实验均未超过起点，已早停。最终独立测试尚未完成。
+PPO 的方法、配置、历轮结果、运行命令和改进计划统一见 [PPO 文档](PPO.md)，后续实验也更新这一份记录。
+
+GAE 0.99/0.98 对照已完成，50 局测试均分为 203.42/196.54，配对差区间跨零。有界 KL 策略学习率反馈与固定计划的三种子配对续训也已完成：每次新增约 500k 步，各做 50 局新种子测试，三次平均得分为 206.53/198.71，配对差 +7.81、两维区间 [−47.29, 64.17]，尚未确认稳定优势。实现已通过 49 项回归测试；完整协议、结果与统计限制见 PPO 文档。
+
+```bash
+# 从冻结起点启动新的 PPO 实验；每次使用不同的 run-name
+python src/launch_training.py --algo ppo --config configs/ppo_custom_gae.yaml \
+  --resume models/ppo_custom_fixed_angle_gae_source_20261022/balanced_control.zip \
+  --run-name ppo_custom_fixed_angle_gae_new --device auto
+
+# 查询当前后台任务
+python src/launch_training.py --run-name ppo_custom_fixed_angle_gae_500k_20261022 --status
+python src/launch_training.py --run-name ppo_custom_fixed_angle_gae_control_500k_20261022 --status
+```
+
+参数、独立评估和产物说明见 [运行指南](PPO.md#usage)，已有结果与统计限制见 [历史实验](PPO.md#history)。
+
+## DQN 最佳模型和续训
+
+当前推荐模型：`models/dqn_custom_fixed_angle_refine_200k/best_model/best_model.zip`。50 局开发评估均分 283.48，额外相同的 30 个开发种子复测均分 260.27；两套评估分别报告。后续三步回报与扩大回放实验均未超过起点，已早停。冻结模型在 121000–121049 的 50 局统一测试均分为 273.36，完整结果与 PPO 比较见 [报告](report/README.md#统一测试与比较)。
 
 ```bash
 python src/launch_training.py --config configs/dqn_custom_refine.yaml \
@@ -90,11 +111,13 @@ python src/record_video.py \
 | 目录 | 用途 |
 |---|---|
 | `src/`、`src/web/` | 游戏、预处理、训练、评估、网页、绘图与视频入口 |
-| `configs/` | 从头训练与续训两份配置 |
+| `configs/` | DQN 从头训练、DQN 续训和 PPO 配置 |
 | `tests/` | 游戏物理、模型接口、回放、回调和网页检查 |
 | `models/<run>/` | 模型、checkpoint、replay；历史正式实验产物保留 |
 | `logs/<run>/` | 配置快照、TensorBoard、进程状态、评估与训练总结 |
 | `results/` | evaluation、figures、videos |
+
+PPO 与 DQN 一样保留可提交 GitHub 的配置、训练/评估指标、逐局分数和选模记录；模型权重及运行日志保留本地。保留范围和核验命令见 [PPO 数据保留说明](PPO.md#实验数据保留与-github-提交)，文件清单见 [SHA-256 清单](report/data/ppo_artifacts.sha256)。
 
 CUDA 不可用时在宿主环境检查 `nvidia-smi` 和 PyTorch；沙箱看不到 GPU 不代表 GPU 故障。内存不足时降低 buffer-size。没有 loss 时检查是否超过 learning-starts。原始 Gymnasium step 返回 5 项，SB3 VecEnv 返回 4 项；共享环境工厂处理跳帧、堆帧和终止。
 
